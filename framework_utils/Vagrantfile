@@ -1,0 +1,36 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.define "ubuntu" do |vm|
+        # Choose an explicit version of the Ubuntu box for consistency
+        vm.vm.box = "ubuntu/trusty64"
+        #vm.vm.box_version = "*"
+
+        # Provider-specific configuration for VirtualBox
+        vm.vm.provider "virtualbox" do |vb|
+            vb.gui = false
+            vb.memory = "1024"
+            vb.customize ["modifyvm", :id, "--autostart-enabled", "on"]
+            vb.customize ["modifyvm", :id, "--autostart-delay", "0"]
+        end      
+
+        # Network configurations (uncomment and customize as needed)
+        # vm.vm.network "forwarded_port", guest: 80, host: 8080
+        # vm.vm.network "private_network", ip: "192.168.33.10"
+        # vm.vm.network "public_network"
+
+        # Synced folders (uncomment and customize as needed)
+        # vm.vm.synced_folder "../data", "/vagrant_data"
+
+        # Provisioning script
+        vm.vm.provision "shell", inline: <<-SHELL
+            # Update and upgrade packages
+            sudo apt-get update -y
+            sudo apt-get upgrade -y 
+
+            # Install Python 3 and pip
+            sudo apt-get install python3 python3-pip -y
+        SHELL
+    end
+end

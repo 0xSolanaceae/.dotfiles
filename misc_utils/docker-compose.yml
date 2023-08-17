@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  #reiverr:
+  #  image: ghcr.io/aleksilassila/reiverr:latest
+  #  container_name: reiverr
+  #  ports:
+  #    - 9494:9494
+  #  environment:
+  #    PUBLIC_RADARR_API_KEY: yourapikeyhere
+  #    PUBLIC_RADARR_BASE_URL: http://127.0.0.1:7878
+  #    PUBLIC_SONARR_API_KEY: yourapikeyhere
+  #    PUBLIC_SONARR_BASE_URL: http://127.0.0.1:8989
+  #    PUBLIC_JELLYFIN_API_KEY: yourapikeyhere
+  #    PUBLIC_JELLYFIN_URL: http://127.0.0.1:8096
+  #  restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    volumes:
+      - /path/to/config:/config
+      - /path/to/downloads:/downloads
+      - /path/to/media:/tvshows
+    restart: always
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=your_time_zone
+    ports:
+      - "8989:8989"
+
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    volumes:
+      - /path/to/config:/config
+      - /path/to/downloads:/downloads
+      - /path/to/movies:/movies
+    restart: always
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=your_time_zone
+    ports:
+      - "7878:7878"
+
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    volumes:
+      - /path/to/media:/data
+      - /path/to/config:/config
+    restart: always
+    environment:
+      - TZ=your_time_zone
+    ports:
+      - "8096:8096"
+
+  wireguard:
+    image: linuxserver/wireguard
+    container_name: wireguard
+    volumes:
+      - /path/to/config:/config
+    restart: always
+    environment:
+      - TZ=your_time_zone
+      - SERVERURL=your_public_ip_or_domain
+      - SERVERPORT=51820
+      - PEERS=1
+      - PEERDNS=auto
+      - INTERNAL_SUBNET=10.13.13.0
+    ports:
+      - "51820:51820/udp"
+
+  pihole:
+    image: pihole/pihole
+    container_name: pihole
+    environment:
+      - TZ=your_time_zone
+      - ServerIP=your_server_ip
+    volumes:
+      - /path/to/config:/etc/pihole
+      - /path/to/dnsmasq.d:/etc/dnsmasq.d
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80"
+      - "443:443"
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    restart: always
+
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    volumes:
+      - /path/to/data:/var/www/html
+    environment:
+      - TZ=your_time_zone
+    ports:
+      - "8080:80"
+    restart: always
