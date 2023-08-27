@@ -8,6 +8,8 @@ read -p "Do you want to install Tailscale? (y/n): " install_tailscale
 read -p "Do you want to install Oh-My-Zsh? (y/n): " install_ohmyzsh
 # Prompt for Vagrant installation
 read -p "Do you want to install Vagrant? (y/n): " install_vagrant
+# Prompt for Driver installation
+read -p "Do you want to install Drivers? (y/n): " install_drivers
 
 # Update package lists and upgrade system
 sudo apt update
@@ -149,6 +151,16 @@ if [ "$install_vagrant" = "y" ]; then
         wget https://releases.hashicorp.com/vagrant/2.2.9/vagrant_2.2.9_x86_64.deb
         sudo dpkg -i vagrant_2.2.9_x86_64.deb
         rm vagrant_2.2.9_x86_64.deb
+    fi
+fi
+
+if [ "$install_drivers" = "y" ]; then
+    # Install Drivers
+    if ! command -v rtl8812au.git >/dev/null 2>&1; then
+        git clone -b v5.6.4.2 https://github.com/aircrack-ng/rtl8812au.git
+        cd rtl8812au
+        sudo make dkms_install
+        cd ..
     fi
 fi
 
