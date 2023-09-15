@@ -97,7 +97,7 @@ for package in "${packages[@]}"; do
     fi
 done
 
-sudo nala install git nmap python3 python3-pip curl wget net-tools openssh-server nginx apache2 fail2ban docker.io docker-compose apt-transport-https ca-certificates software-properties-common mokutil build-essential libelf-dev linux-headers-$(uname -r) dkms neofetch screenfetch zsh speedtest-cli
+# sudo nala install git nmap python3 python3-pip curl wget net-tools openssh-server nginx apache2 fail2ban docker.io docker-compose apt-transport-https ca-certificates software-properties-common mokutil build-essential libelf-dev linux-headers-$(uname -r) dkms neofetch screenfetch zsh speedtest-cli
 
 # install system monitoring resources
 if ! command -v bashtop >/dev/null 2>&1; then
@@ -175,8 +175,8 @@ sudo usermod -aG input $USER
 sudo usermod -aG disk $USER
 
 # Clean up and finalize
-sudo nala-get clean
-sudo nala-get autoremove -y
+sudo apt-get clean
+sudo apt-get autoremove -y
 
 if [ "$install_ohmyzsh" = "y" ]; then
     # Install Oh-My-Zsh and configure it
