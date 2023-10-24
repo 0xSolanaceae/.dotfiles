@@ -41,7 +41,7 @@ echo 'APT::Periodic::Update-Package-Lists "1";' | sudo tee -a /etc/apt/apt.conf.
 echo 'APT::Periodic::Unattended-Upgrade "1";' | sudo tee -a /etc/apt/apt.conf.d/20auto-upgrades
 
 # Install and set up a basic firewall (ufw)
-sudo nala install ufw
+sudo nala install ufw -y
 # Allow specific ports for your hosted services, e.g., HTTP, HTTPS, etc.
 # sudo ufw allow 'Nginx Full'
 # sudo ufw allow 'OpenSSH'
