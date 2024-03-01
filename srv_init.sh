@@ -57,7 +57,7 @@ echo "[+] Package install..."
 
 # Update and clean the system
 sudo nala update
-sudo nala upgrade
+sudo nala upgrade -y
 sudo nala autoremove
 
 # List of packages to install
@@ -100,9 +100,9 @@ done
 # sudo nala install git nmap python3 python3-pip curl wget net-tools openssh-server nginx apache2 fail2ban docker.io docker-compose apt-transport-https ca-certificates software-properties-common mokutil build-essential libelf-dev linux-headers-$(uname -r) dkms neofetch screenfetch zsh speedtest-cli
 
 # install system monitoring resources
-if ! command -v bashtop >/dev/null 2>&1; then
-    echo "[+] Bashtop is not installed. Installing..."
-    sudo nala install -y bashtop
+if ! command -v btop >/dev/null 2>&1; then
+    echo "[+] Btop is not installed. Installing..."
+    sudo nala install -y btop
 fi
 
 if ! command -v fff >/dev/null 2>&1; then
@@ -193,3 +193,6 @@ echo "Oh My Zsh configuration completed."
 echo "------------------------------------------------------------------------------------------"
 echo "[+] Completed; Installed required packages and configured settings."
 echo "------------------------------------------------------------------------------------------"
+
+# https://linuxconfig.org/how-to-change-welcome-message-motd-on-ubuntu-18-04-server
+####  https://www.tecmint.com/ssh-warning-banner-linux/
