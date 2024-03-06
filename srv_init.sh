@@ -162,6 +162,12 @@ if [ "$install_drivers" = "y" ]; then
         sudo make dkms_install
         cd ..
     fi
+
+    if ! command -v 8814au >/dev/null 2>&1; then
+        git clone https://github.com/morrownr/8814au.git
+        cd "8814au"
+        sudo ./install-driver.sh
+        cd ..
 fi
 
 # qemu-kvm installation
