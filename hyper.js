@@ -4,11 +4,12 @@
 // See https://hyper.is#cfg for all currently supported options.
 module.exports = {
     config: {
+	    opacity: 0.9,
         // choose either `'stable'` for receiving highly polished,
         // or `'canary'` for less polished but more frequent updates
         updateChannel: 'stable',
         // default font size in pixels for all tabs
-        fontSize: 14,
+        fontSize: 16,
         // font family with optional fallbacks
         fontFamily: 'Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
         // default font weight: 'normal' or 'bold'
@@ -137,7 +138,7 @@ module.exports = {
     //   `hyperpower`
     //   `@company/project`
     //   `project#1.0.1`
-    plugins: ["hyper-opacity", "hyper-rose-pine"],
+    plugins: ["hyper-opacity", "hyper-rose-pine", "hyper-tabs-enhanced"],
     // in development, you can create a directory under
     // `~/.hyper_plugins/local/` and include it here
     // to load it and avoid it being `npm install`ed
