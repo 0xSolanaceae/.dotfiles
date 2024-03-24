@@ -4,7 +4,7 @@
 // See https://hyper.is#cfg for all currently supported options.
 module.exports = {
     config: {
-	    opacity: 0.9,
+	    opacity: 0.96,
         // choose either `'stable'` for receiving highly polished,
         // or `'canary'` for less polished but more frequent updates
         updateChannel: 'stable',
@@ -138,7 +138,10 @@ module.exports = {
     //   `hyperpower`
     //   `@company/project`
     //   `project#1.0.1`
-    plugins: ["hyper-opacity", "hyper-rose-pine", "hyper-tabs-enhanced"],
+    plugins: [
+    "hyper-opacity", 
+    "hyper-rose-pine", 
+    ],
     // in development, you can create a directory under
     // `~/.hyper_plugins/local/` and include it here
     // to load it and avoid it being `npm install`ed
