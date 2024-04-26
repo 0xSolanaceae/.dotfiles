@@ -137,8 +137,6 @@ brew install micro
 # install macchina (neofetch replacement)
 brew install macchina
 
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
 # Install Oh-My-Zsh and configure it
@@ -171,6 +169,8 @@ function yy() {
 export PATH="\$PATH:/home/camus/.local/bin"
 eval "\$(zoxide init zsh)"
 alias ls='exa'
+alias ll='exa -alh'
+alias tree='exa --tree'
 alias cat='bat'
 alias cd='z'
 alias cdi='zi'
@@ -179,6 +179,9 @@ alias dir='exa'
 alias nano='micro'
 alias neofetch='macchina'
 alias ping='gping'
+alias grep='rg'
+
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 EOF
 )
 
