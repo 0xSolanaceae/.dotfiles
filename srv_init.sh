@@ -76,7 +76,6 @@ packages=(
     screenfetch
     zsh
     bat
-    exa
 )
 
 mkdir -p ~/.local/bin
@@ -136,6 +135,8 @@ brew install zsh-autosuggestions
 brew install micro
 # install macchina (neofetch replacement)
 brew install macchina
+# install eza (exa replacement)
+brew install eza
 
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
@@ -168,14 +169,14 @@ function yy() {
 
 export PATH="\$PATH:/home/camus/.local/bin"
 eval "\$(zoxide init zsh)"
-alias ls='exa'
-alias ll='exa -alh'
-alias tree='exa --tree'
+alias ls='eza'
+alias ll='eza -alh'
+alias tree='eza --tree'
 alias cat='bat'
 alias cd='z'
 alias cdi='zi'
 alias cls='clear'
-alias dir='exa'
+alias dir='eza'
 alias nano='micro'
 alias neofetch='macchina'
 alias ping='gping'
