@@ -2,17 +2,13 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
-# Prompt for Tailscale installation
 read -p "Do you want to install Tailscale? (y/n): " install_tailscale
-# Prompt for Vagrant installation
 read -p "Do you want to install Vagrant? (y/n): " install_vagrant
-# Prompt for Driver installation
 read -p "Do you want to install Drivers? (y/n): " install_drivers
 
 sudo apt install nala -y
 sudo nala fetch
 
-# Update package lists and upgrade system
 sudo nala update
 sudo nala upgrade
 
@@ -38,27 +34,24 @@ sudo nala install -y unattended-upgrades
 echo 'APT::Periodic::Update-Package-Lists "1";' | sudo tee -a /etc/apt/apt.conf.d/20auto-upgrades
 echo 'APT::Periodic::Unattended-Upgrade "1";' | sudo tee -a /etc/apt/apt.conf.d/20auto-upgrades
 
-# Install and set up a basic firewall (ufw)
 sudo nala install ufw -y
-# Allow specific ports for your hosted services, e.g., HTTP, HTTPS, etc.
+# Allow specific ports
 # sudo ufw allow 'Nginx Full'
 # sudo ufw allow 'OpenSSH'
 sudo ufw enable
 
-# Harden the system by installing and configuring AppArmor
 sudo nala install -y apparmor apparmor-utils
 sudo aa-enforce /etc/apparmor.d/*
 sudo systemctl restart apparmor
 
 echo "------------------------------------------------------------------------------------------"
 echo "[+] Package install..."
+echo "------------------------------------------------------------------------------------------"
 
-# Update and clean the system
 sudo nala update
 sudo nala upgrade -y
 sudo nala autoremove
 
-# List of packages to install
 packages=(
     git
     nmap
@@ -71,21 +64,19 @@ packages=(
     nginx
     apache2
     fail2ban
-    docker.io
-    docker-compose
     ca-certificates
     software-properties-common
     mokutil
     build-essential
     gcc
     libelf-dev
-    linux-headers-$(uname -r)
+    speedtest-cli
     dkms
     neofetch
     screenfetch
     zsh
-    speedtest-cli
     bat
+    exa
 )
 
 mkdir -p ~/.local/bin
@@ -98,8 +89,6 @@ for package in "${packages[@]}"; do
         sudo nala install -y "$package"
     fi
 done
-
-# sudo nala install git nmap python3 python3-pip curl wget net-tools openssh-server nginx apache2 fail2ban docker.io docker-compose apt-transport-https ca-certificates software-properties-common mokutil build-essential libelf-dev linux-headers-$(uname -r) dkms neofetch screenfetch zsh speedtest-cli
 
 if ! command -v btop >/dev/null 2>&1; then
     echo "[+] Btop is not installed. Installing..."
@@ -115,6 +104,21 @@ if ! command -v brew >/dev/null 2>&1; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
 # install gping
 brew install gping
 # install fzf
@@ -123,12 +127,65 @@ brew install fzf
 brew install ripgrep
 # install cbonsai
 brew install cbonsai
+# install yazi
+brew install yazi
+# install zsh-autosuggestions
+brew install zsh-autosuggestions
+# install micro  
+# ctrl-e | set colorscheme twilight
+brew install micro
+# install macchina (neofetch replacement)
+brew install macchina
 
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-if ! command -v neovim >/dev/null 2>&1; then
-    echo "[+] Neovim is not installed. Installing..."
-    sudo nala install -y neovim
+curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+
+# Install Oh-My-Zsh and configure it
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "[+] Installing Oh-My-Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
+
+sed -i 's/ZSH_THEME=".*"/ZSH_THEME="nanotech"/' ~/.zshrc
+
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+if ! grep -q "zsh-syntax-highlighting" "$HOME/.zshrc"; then
+    echo "Adding zsh-syntax-highlighting to .zshrc plugins..."
+    echo 'plugins+=(zsh-syntax-highlighting)' >> "$HOME/.zshrc"
+else
+    echo "zsh-syntax-highlighting is already present in .zshrc plugins."
+fi
+
+CONFIGURATIONS=$(cat <<EOF
+function yy() {
+    local tmp="\$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "\$@" --cwd-file="\$tmp"
+    if cwd="\$(cat -- "\$tmp")" && [ -n "\$cwd" ] && [ "\$cwd" != "\$PWD" ]; then
+        cd -- "\$cwd"
+    fi
+    rm -f -- "\$tmp"
+}
+
+export PATH="\$PATH:/home/camus/.local/bin"
+eval "\$(zoxide init zsh)"
+alias ls='exa'
+alias cat='bat'
+alias cd='z'
+alias cdi='zi'
+alias cls='clear'
+alias dir='exa'
+alias nano='micro'
+alias neofetch='macchina'
+alias ping='gping'
+EOF
+)
+
+echo "$CONFIGURATIONS" >> ~/.zshrc
+
+echo "Configurations added to ~/.zshrc"
+echo "Oh My Zsh configuration completed."
 
 if [ "$install_tailscale" = "y" ]; then
     # Install Tailscale
@@ -185,16 +242,7 @@ sudo usermod -aG disk $USER
 # Clean up and finalize
 sudo apt-get clean
 sudo apt-get autoremove -y
-
-# Install Oh-My-Zsh and configure it
-#if [ ! -d "$HOME/.oh-my-zsh" ]; then
-#    echo "[+] Installing Oh-My-Zsh..."
-#    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-#fi
-
-#sed -i 's/ZSH_THEME=".*"/ZSH_THEME="cypher"/' ~/.zshrc
-#source ~/.zshrc
-#echo "Oh My Zsh configuration completed."
+source ~/.zshrc
 
 echo "------------------------------------------------------------------------------------------"
 echo "[+] Completed; Installed required packages and configured settings."
