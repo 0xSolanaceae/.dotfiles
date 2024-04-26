@@ -1,0 +1,314 @@
+# tabby terminal config file
+version: 7
+groups: []
+hotkeys:
+  toggle-window:
+    - Ctrl-Space
+  copy-current-path: []
+  ctrl-c:
+    - Ctrl-C
+  copy:
+    - Ctrl-Shift-C
+  paste:
+    - Ctrl-Shift-V
+    - Shift-Insert
+  select-all:
+    - Ctrl-Shift-A
+  clear: []
+  zoom-in:
+    - Ctrl-=
+    - Ctrl-Shift-=
+  zoom-out:
+    - Ctrl--
+    - Ctrl-Shift--
+  reset-zoom:
+    - Ctrl-0
+  home:
+    - Home
+  end:
+    - End
+  previous-word:
+    - Ctrl-Left
+  next-word:
+    - Ctrl-Right
+  delete-previous-word:
+    - Ctrl-Backspace
+  delete-line:
+    - Ctrl-Shift-Backspace
+  delete-next-word:
+    - Ctrl-Delete
+  search:
+    - Ctrl-Shift-F
+  pane-focus-all:
+    - Ctrl-Shift-I
+  focus-all-tabs:
+    - Ctrl-Alt-Shift-I
+  scroll-to-top:
+    - Ctrl-PageUp
+  scroll-up:
+    - Alt-PageUp
+  scroll-down:
+    - Alt-PageDown
+  scroll-to-bottom:
+    - Ctrl-PageDown
+  restart-telnet-session: []
+  restart-ssh-session: []
+  launch-winscp: []
+  settings-tab: {}
+  settings:
+    - Ctrl-,
+  serial:
+    - Alt-K
+  restart-serial-session: []
+  new-tab:
+    - Ctrl-Shift-T
+  new-window:
+    - Ctrl-Shift-N
+  profile: {}
+  profile-selectors: {}
+  toggle-fullscreen:
+    - F11
+    - Alt-Enter
+  close-tab:
+    - Ctrl-Shift-W
+  reopen-tab:
+    - Ctrl-Shift-Z
+  toggle-last-tab: []
+  rename-tab:
+    - Ctrl-Shift-R
+  next-tab:
+    - Ctrl-Shift-Right
+    - Ctrl-Tab
+  previous-tab:
+    - Ctrl-Shift-Left
+    - Ctrl-Shift-Tab
+  move-tab-left:
+    - Ctrl-Shift-PageUp
+  move-tab-right:
+    - Ctrl-Shift-PageDown
+  rearrange-panes:
+    - Ctrl-Shift
+  duplicate-tab: []
+  restart-tab: []
+  reconnect-tab: []
+  disconnect-tab: []
+  explode-tab:
+    - Ctrl-Shift-.
+  combine-tabs:
+    - Ctrl-Shift-,
+  tab-1:
+    - Alt-1
+  tab-2:
+    - Alt-2
+  tab-3:
+    - Alt-3
+  tab-4:
+    - Alt-4
+  tab-5:
+    - Alt-5
+  tab-6:
+    - Alt-6
+  tab-7:
+    - Alt-7
+  tab-8:
+    - Alt-8
+  tab-9:
+    - Alt-9
+  tab-10:
+    - Alt-0
+  tab-11: []
+  tab-12: []
+  tab-13: []
+  tab-14: []
+  tab-15: []
+  tab-16: []
+  tab-17: []
+  tab-18: []
+  tab-19: []
+  tab-20: []
+  split-right:
+    - Ctrl-Shift-S
+  split-bottom:
+    - Ctrl-Shift-D
+  split-left: []
+  split-top: []
+  pane-nav-right:
+    - Ctrl-Alt-Right
+  pane-nav-down:
+    - Ctrl-Alt-Down
+  pane-nav-up:
+    - Ctrl-Alt-Up
+  pane-nav-left:
+    - Ctrl-Alt-Left
+  pane-nav-previous:
+    - Ctrl-Alt-[
+  pane-nav-next:
+    - Ctrl-Alt-]
+  pane-nav-1: []
+  pane-nav-2: []
+  pane-nav-3: []
+  pane-nav-4: []
+  pane-nav-5: []
+  pane-nav-6: []
+  pane-nav-7: []
+  pane-nav-8: []
+  pane-nav-9: []
+  pane-maximize:
+    - Ctrl-Alt-Enter
+  close-pane: []
+  pane-increase-vertical: []
+  pane-decrease-vertical: []
+  pane-increase-horizontal: []
+  pane-decrease-horizontal: []
+  switch-profile:
+    - Ctrl-Alt-T
+  profile-selector:
+    - Ctrl-Shift-E
+  command-selector:
+    - Ctrl-Shift-P
+terminal:
+  searchOptions: {}
+  colorScheme:
+    name: Rose Pine
+    foreground: '#e0def4'
+    background: '#191724'
+    cursor: '#555169'
+    colors:
+      - '#26233a'
+      - '#eb6f92'
+      - '#31748f'
+      - '#f6c177'
+      - '#9ccfd8'
+      - '#c4a7e7'
+      - '#ebbcba'
+      - '#e0def4'
+      - '#6e6a86'
+      - '#eb6f92'
+      - '#31748f'
+      - '#f6c177'
+      - '#9ccfd8'
+      - '#c4a7e7'
+      - '#ebbcba'
+      - '#e0def4'
+  customColorSchemes: []
+  profile: local:wsl-Ubuntu
+  ligatures: true
+  fallbackFont: ''
+  copyOnSelect: false
+  warnOnMultilinePaste: false
+  hideTabIndex: true
+ssh:
+  warnOnClose: true
+clickableLinks: {}
+accessibility: {}
+appearance:
+  vibrancy: true
+  opacity: 0.87
+  spaciness: 1.1
+  lastTabClosesWindow: true
+hacks:
+  disableVibrancyWhileDragging: true
+  disableGPU: true
+providerBlacklist: []
+commandBlacklist: []
+enableAnalytics: false
+enableWelcomeTab: false
+profileDefaults:
+  ssh:
+    disableDynamicTitle: true
+highlightPlugin:
+  highlightProfiles:
+    - id: 60606be0-c0ff-42bc-bf77-de8a2435447f
+      name: Default
+      keywords:
+        - text: ERROR
+          enabled: true
+          background: true
+          backgroundColor: '1'
+        - text: WARN
+          enabled: true
+          background: true
+          backgroundColor: '3'
+        - text: INFO
+          enabled: true
+          background: true
+          backgroundColor: '6'
+        - text: 错误
+          enabled: true
+          background: true
+          backgroundColor: '1'
+        - text: 警告
+          enabled: true
+          background: true
+          backgroundColor: '3'
+        - text: 信息
+          enabled: true
+          background: true
+          backgroundColor: '6'
+  replaceProfiles:
+    - id: 986666dd-dac9-4c7a-a295-9b4aff66abdd
+      name: Default
+      patterns:
+        - enabled: true
+          search: ERROR
+          replace: 出错啦
+        - enabled: true
+          search: WARN
+          replace: 警告警告
+profileBlacklist: []
+recoverTabs: false
+pluginBlacklist:
+  - fit-screen
+  - serial
+  - telnet
+profiles:
+  - type: local
+    name: ssh2sftp_win_template
+    icon: fas fa-terminal
+    options:
+      command: c:\Git\usr\bin\sftp.exe
+      env: {}
+      cwd: ''
+      args:
+        - '-oStrictHostKeyChecking=no'
+        - '-oServerAliveInterval=30'
+        - '-oServerAliveCountMax=1051200'
+        - '-oTCPKeepAlive=yes'
+    group: ssh2sftp_template
+    id: local:custom:ssh2sftp_win_template:c617da05-d05c-482d-8ca6-3c7eb99452e9
+    disableDynamicTitle: true
+    isTemplate: true
+  - type: local
+    name: ssh2sftp_linux_template
+    icon: fas fa-terminal
+    options:
+      command: /usr/bin/sftp
+      env: {}
+      cwd: ''
+      args:
+        - '-oStrictHostKeyChecking=no'
+        - '-oServerAliveInterval=30'
+        - '-oServerAliveCountMax=1051200'
+        - '-oTCPKeepAlive=yes'
+    group: ssh2sftp_template
+    id: local:custom:ssh2sftp_linux_template:6c4bcc75-f690-482a-a882-40e1c9851a3d
+    disableDynamicTitle: true
+    isTemplate: true
+  - type: local
+    name: ssh2sftp_mac_template
+    icon: fas fa-terminal
+    options:
+      command: /usr/local/opt/openssh/bin/sftp
+      args:
+        - '-oStrictHostKeyChecking=no'
+        - '-oServerAliveInterval=30'
+        - '-oServerAliveCountMax=1051200'
+        - '-oTCPKeepAlive=yes'
+      env: {}
+      cwd: ''
+    id: local:custom:ssh2sftp_mac_template:33162a26-7807-4c5e-ac2d-68cd2d9a4a24
+    group: ssh2sftp_template
+    disableDynamicTitle: true
+    isTemplate: true
+configSync:
+  parts: {}
