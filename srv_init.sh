@@ -4,8 +4,6 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Prompt for Tailscale installation
 read -p "Do you want to install Tailscale? (y/n): " install_tailscale
-# Prompt for Oh-My-Zsh installation
-read -p "Do you want to install Oh-My-Zsh? (y/n): " install_ohmyzsh
 # Prompt for Vagrant installation
 read -p "Do you want to install Vagrant? (y/n): " install_vagrant
 # Prompt for Driver installation
@@ -75,11 +73,11 @@ packages=(
     fail2ban
     docker.io
     docker-compose
-    nala-transport-https
     ca-certificates
     software-properties-common
     mokutil
     build-essential
+    gcc
     libelf-dev
     linux-headers-$(uname -r)
     dkms
@@ -87,7 +85,11 @@ packages=(
     screenfetch
     zsh
     speedtest-cli
+    bat
 )
+
+mkdir -p ~/.local/bin
+ln -s /usr/bin/batcat ~/.local/bin/bat
 
 # Install required packages
 for package in "${packages[@]}"; do
@@ -99,30 +101,29 @@ done
 
 # sudo nala install git nmap python3 python3-pip curl wget net-tools openssh-server nginx apache2 fail2ban docker.io docker-compose apt-transport-https ca-certificates software-properties-common mokutil build-essential libelf-dev linux-headers-$(uname -r) dkms neofetch screenfetch zsh speedtest-cli
 
-# install system monitoring resources
 if ! command -v btop >/dev/null 2>&1; then
     echo "[+] Btop is not installed. Installing..."
     sudo nala install -y btop
 fi
 
-if ! command -v fff >/dev/null 2>&1; then
-    echo "[+] FFF is not installed. Installing..."
-    git clone https://github.com/dylanaraps/fff
-    cd fff/
-    sudo make install
-    cd ..
-    echo 'f() { fff "$@"; cd "$(cat "${XDG_CACHE_HOME:=${HOME}/.cache}/fff/.fff_d")"; }' >> ~/.zshrc
-
+# install brew
+if ! command -v brew >/dev/null 2>&1; then
+    echo "[+] Homebrew is not installed. Installing..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/camus/.bashrc
+    (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/camus/.zshrc
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
-if ! command -v glow >/dev/null 2>&1; then
-    echo "[+] Glow is not installed. Installing..."
-    sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
-    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
-    sudo nala update
-    sudo nala install -y glow
-fi
+# install gping
+brew install gping
+# install fzf
+brew install fzf
+# install ripgrep
+brew install ripgrep
+# install cbonsai
+brew install cbonsai
+
 
 if ! command -v neovim >/dev/null 2>&1; then
     echo "[+] Neovim is not installed. Installing..."
@@ -168,6 +169,7 @@ if [ "$install_drivers" = "y" ]; then
         cd "8814au"
         sudo ./install-driver.sh
         cd ..
+    fi
 fi
 
 # qemu-kvm installation
@@ -184,17 +186,15 @@ sudo usermod -aG disk $USER
 sudo apt-get clean
 sudo apt-get autoremove -y
 
-if [ "$install_ohmyzsh" = "y" ]; then
-    # Install Oh-My-Zsh and configure it
-    if [ ! -d "$HOME/.oh-my-zsh" ]; then
-        echo "[+] Installing Oh-My-Zsh..."
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    fi
-fi
+# Install Oh-My-Zsh and configure it
+#if [ ! -d "$HOME/.oh-my-zsh" ]; then
+#    echo "[+] Installing Oh-My-Zsh..."
+#    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+#fi
 
-sed -i 's/ZSH_THEME=".*"/ZSH_THEME="cypher"/' ~/.zshrc
-source ~/.zshrc
-echo "Oh My Zsh configuration completed."
+#sed -i 's/ZSH_THEME=".*"/ZSH_THEME="cypher"/' ~/.zshrc
+#source ~/.zshrc
+#echo "Oh My Zsh configuration completed."
 
 echo "------------------------------------------------------------------------------------------"
 echo "[+] Completed; Installed required packages and configured settings."
