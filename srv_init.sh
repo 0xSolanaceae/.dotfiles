@@ -1,80 +1,276 @@
-import g4f
-import os
-import shutil
-from yaspin import yaspin
+#!/bin/bash
 
-def main(model_name, bot_names, bot_to_bot_mode):
-    print("Press Ctrl+C to exit at any time.")
-    print(f"Current model: {model_name}\n")
-    print(vanity_line())
-    try:
-        engine = g4f.client.Client()
-        with open(f'models\{model_name}.txt', 'r', encoding="utf-8") as file:
-            context = file.read()
+export DEBIAN_FRONTEND=noninteractive
 
-        chat_history = []
-        chat_history.append(("system", context))
+read -p "Do you want to install Tailscale? (y/n): " install_tailscale
+read -p "Do you want to install Vagrant? (y/n): " install_vagrant
+read -p "Do you want to install Drivers? (y/n): " install_drivers
 
-        bot_index = 0
+sudo apt install nala -y
+sudo nala fetch
 
-        while True:
-            if bot_to_bot_mode:
-                user_input = ""
-            else:
-                user_input = input("You: ")
-                print()
-            if not bot_to_bot_mode:
-                chat_history.append(("user", user_input))
+sudo nala update
+sudo nala upgrade
 
-            with yaspin().bouncingBar as sp:
-                sp.text = "Thinking..."
-                completion = engine.chat.completions.create(
-                    model="gpt-3.5-turbo", #gpt-4
-                    messages=[{"role": "user", "content": content} for _, content in chat_history])
-                sp.text = " "
+# Configure firewall (UFW)
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow OpenSSH
+sudo ufw enable
 
-            bot_response = completion.choices[0].message.content
-            bot_name = bot_names[bot_index]
-            
-            if not bot_to_bot_mode:
-                bot_name = bot_name.replace("[1] ", "").replace("[2] ", "")
-                
-            chat_history.append((f"{bot_name}", bot_response))
-            print(f"{bot_name}:", bot_response)
-            print()
+# Disable root login and password authentication for SSH
+sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
+sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+sudo systemctl restart sshd
 
-            if bot_to_bot_mode:
-                bot_index = (bot_index + 1) % len(bot_names)
+# Install and configure fail2ban
+sudo nala install -y fail2ban
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban
 
-    except KeyboardInterrupt:
-        print()
-        print(vanity_line())
-        print("\n\nExiting gracefully...")
-        with open("chat_history.txt", "w") as chat_file:
-            for role, message in chat_history:
-                if role != "system":
-                    chat_file.write(f"{role}: {message}\n\n")
-        print("Chat history saved to chat_history.txt")
-        exit()
+# Set up automatic security updates
+sudo nala install -y unattended-upgrades
+echo 'APT::Periodic::Update-Package-Lists "1";' | sudo tee -a /etc/apt/apt.conf.d/20auto-upgrades
+echo 'APT::Periodic::Unattended-Upgrade "1";' | sudo tee -a /etc/apt/apt.conf.d/20auto-upgrades
 
-    except Exception as e:
-        with open("error.log", "a") as error_log:
-            error_log.write(str(e) + "\n")
-        print("An error occurred:", e)
+sudo nala install ufw -y
+# Allow specific ports
+# sudo ufw allow 'Nginx Full'
+# sudo ufw allow 'OpenSSH'
+sudo ufw enable
 
-def vanity_line():
-    terminal_width = shutil.get_terminal_size().columns
-    dash = "—"
-    dashes = dash * (terminal_width - 2)
-    return f"<{dashes}>"
+sudo nala install -y apparmor apparmor-utils
+sudo aa-enforce /etc/apparmor.d/*
+sudo systemctl restart apparmor
 
-if __name__ == "__main__":
-    model_name = "pajama_sam"
-    bot_names = [f"[1] {model_name.capitalize()}", f"[2] {model_name.capitalize()}"]
-    bot_to_bot_mode = False
+echo "------------------------------------------------------------------------------------------"
+echo "[+] Package install..."
+echo "------------------------------------------------------------------------------------------"
 
-    with open("error.log", "w") as error_log:
-        error_log.write("")
+sudo nala update
+sudo nala upgrade -y
+sudo nala autoremove
 
-    os.system("cls||clear")
-    main(model_name, bot_names, bot_to_bot_mode)
+packages=(
+    git
+    nmap
+    python3
+    python3-pip
+    curl
+    wget
+    net-tools
+    openssh-server
+    nginx
+    apache2
+    fail2ban
+    ca-certificates
+    software-properties-common
+    mokutil
+    build-essential
+    gcc
+    libelf-dev
+    speedtest-cli
+    dkms
+    neofetch
+    zsh
+    bat
+    fd-find
+    btop
+)
+
+# Install required packages
+for package in "${packages[@]}"; do
+    if ! dpkg -l | grep -q "^ii  $package "; then
+        echo "[+] $package is not installed. Installing..."
+        sudo nala install -y "$package"
+    fi
+done
+
+mkdir -p ~/.local/bin
+ln -s /usr/bin/batcat ~/.local/bin/bat
+
+ln -s $(which fdfind) ~/.local/bin/fd
+
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+cd /usr/bin/
+git clone https://github.com/angelofallars/treefetch.git
+cd treefetch
+cargo install --git https://github.com/angelofallars/treefetch
+cd ~
+
+# typing test tool
+cargo install thokr
+
+curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+
+# install brew
+if ! command -v brew >/dev/null 2>&1; then
+    echo "[+] Homebrew is not installed. Installing..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/camus/.bashrc
+    (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/camus/.zshrc
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
+# install gping
+brew install gping
+# install fzf
+brew install fzf
+# install ripgrep
+brew install ripgrep
+# install cbonsai
+brew install cbonsai
+# install yazi
+brew install yazi
+# install zsh-autosuggestions
+brew install zsh-autosuggestions
+# install micro  
+# ctrl-e | set colorscheme twilight
+brew install micro
+# install macchina (neofetch replacement)
+brew install macchina
+# install eza (exa replacement)
+brew install eza
+# install bottom (btm)
+brew install bottom
+# install fastfetch
+brew install fastfetch
+
+# Install Oh-My-Zsh and configure it
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "[+] Installing Oh-My-Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+sed -i 's/ZSH_THEME=".*"/ZSH_THEME="nanotech"/' ~/.zshrc
+
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+if ! grep -q "zsh-syntax-highlighting" "$HOME/.zshrc"; then
+    echo "Adding zsh-syntax-highlighting to .zshrc plugins..."
+    echo 'plugins+=(zsh-syntax-highlighting)' >> "$HOME/.zshrc"
+else
+    echo "zsh-syntax-highlighting is already present in .zshrc plugins."
+fi
+
+CONFIGURATIONS=$(cat <<EOF
+function yy() {
+    local tmp="\$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "\$@" --cwd-file="\$tmp"
+    if cwd="\$(cat -- "\$tmp")" && [ -n "\$cwd" ] && [ "\$cwd" != "\$PWD" ]; then
+        cd -- "\$cwd"
+    fi
+    rm -f -- "\$tmp"
+}
+
+export PATH="\$PATH:/home/camus/.local/bin"
+export PATH="$HOME/.cargo/bin:$PATH"
+
+eval "\$(zoxide init zsh)"
+alias ls='eza'
+alias ll='eza -alh'
+alias tree='eza --tree'
+alias cat='bat'
+alias cd='z'
+alias cdi='zi'
+alias cls='clear'
+alias dir='eza'
+alias nano='micro'
+alias neofetch='macchina'
+alias ping='gping'
+alias grep='rg'
+alias fd='find'
+alias here='explorer.exe .'
+
+treefetch -b
+
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+EOF
+)
+
+echo "$CONFIGURATIONS" >> ~/.zshrc
+
+echo "Configurations added to ~/.zshrc"
+echo "Oh My Zsh configuration completed."
+
+if [ "$install_tailscale" = "y" ]; then
+    # Install Tailscale
+    if ! command -v tailscale >/dev/null 2>&1; then
+        echo "[+] Tailscale is not installed. Installing..."
+        curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
+        curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list >/dev/null
+        sudo nala update
+        sudo nala install -y tailscale
+        tailscale up --ssh
+        # command to enable tailscale funnel
+        # sudo tailscale serve https / http://localhost:8096
+    fi
+fi
+
+if [ "$install_vagrant" = "y" ]; then
+    # Install Vagrant
+    if ! command -v vagrant >/dev/null 2>&1; then
+        echo "[+] Vagrant is not installed. Installing..."
+        sudo nala install -y virtualbox ruby-full
+        wget https://releases.hashicorp.com/vagrant/2.2.9/vagrant_2.2.9_x86_64.deb
+        sudo dpkg -i vagrant_2.2.9_x86_64.deb
+        rm vagrant_2.2.9_x86_64.deb
+    fi
+fi
+
+if [ "$install_drivers" = "y" ]; then
+    # Install Drivers
+    if ! command -v rtl8812au.git >/dev/null 2>&1; then
+        git clone -b v5.6.4.2 https://github.com/aircrack-ng/rtl8812au.git
+        cd rtl8812au
+        sudo make dkms_install
+        cd ..
+    fi
+
+    if ! command -v 8814au >/dev/null 2>&1; then
+        git clone https://github.com/morrownr/8814au.git
+        cd "8814au"
+        sudo ./install-driver.sh
+        cd ..
+    fi
+fi
+
+# qemu-kvm installation
+sudo nala install qemu-kvm qemu-system qemu-utils libvirt-clients libvirt-daemon-system bridge-utils virtinst libvirt-daemon virt-manager -y
+sudo virsh net-start default
+sudo virsh net-autostart default
+sudo usermod -aG libvirt $USER
+sudo usermod -aG libvirt-qemu $USER
+sudo usermod -aG kvm $USER
+sudo usermod -aG input $USER
+sudo usermod -aG disk $USER
+
+# Clean up and finalize
+sudo apt-get clean
+sudo apt-get autoremove -y
+source ~/.zshrc
+
+echo "------------------------------------------------------------------------------------------"
+echo "[+] Completed; Installed required packages and configured settings."
+echo "------------------------------------------------------------------------------------------"
+
+# https://linuxconfig.org/how-to-change-welcome-message-motd-on-ubuntu-18-04-server
+####  https://www.tecmint.com/ssh-warning-banner-linux/
