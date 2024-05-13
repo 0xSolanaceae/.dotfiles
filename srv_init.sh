@@ -6,11 +6,10 @@ read -p "Do you want to install Tailscale? (y/n): " install_tailscale
 read -p "Do you want to install Vagrant? (y/n): " install_vagrant
 read -p "Do you want to install Drivers? (y/n): " install_drivers
 
+sudo apt-get update && sudo apt-get upgrade -y
+
 sudo apt install nala -y
 sudo nala fetch
-
-sudo nala update
-sudo nala upgrade
 
 # Configure firewall (UFW)
 sudo ufw default deny incoming
