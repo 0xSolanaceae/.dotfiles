@@ -93,7 +93,8 @@ ${sudo_cmd} nala install -y \
     zsh \
     bat \
     fd-find \
-    btop
+    btop \
+    zsh-syntax-highlighting
 
 print_grey "${sudo_cmd} nala autoremove -y"
 print_grey "${sudo_cmd} apt clean"
@@ -112,22 +113,16 @@ fi
 print_green "─────────────────────────────────────────────────────"
 print_bold "[+] Installing Rust..."
 print_green "─────────────────────────────────────────────────────"
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s
 
-# Treefetch installation
 print_bold "[+] Installing Treefetch..."
-if [ -d "/usr/bin/treefetch" ]; then
+if [ -d "treefetch" ]; then
   echo "Treefetch is already installed. Skipping installation."
 else
-  cd /usr/bin/ || exit
-
-  ${sudo_cmd} git clone https://github.com/angelofallars/treefetch.git
-
-  cd treefetch || exit
-
-  ${sudo_cmd} cargo install --git https://github.com/angelofallars/treefetch
-
-  cd ~ || exit
+    git clone https://github.com/angelofallars/treefetch.git
+    cd treefetch
+    cargo install --git https://github.com/angelofallars/treefetch
+    cd ~
 fi
 
 print_bold "[+] Installing additional tools..."
@@ -199,12 +194,45 @@ fi
 
 if ! grep -q "zsh-syntax-highlighting" "$HOME/.zshrc"; then
     print_bold "[+] Adding zsh-syntax-highlighting to .zshrc plugins..."
-    echo 'plugins+=(zsh-syntax-highlighting)' >> "$HOME/.zshrc"
+    echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
 else
     print_grey "[-] zsh-syntax-highlighting is already present in .zshrc plugins."
 fi
 
 print_bold "[+] Adding configurations to ~/.zshrc..."
+CONFIGURATIONS=$(cat <<EOF
+function yy() {
+    local tmp="\$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "\$@" --cwd-file="\$tmp"
+    if cwd="\$(cat -- "\$tmp")" && [ -n "\$cwd" ] && [ "\$cwd" != "\$PWD" ]; then
+        cd -- "\$cwd"
+    fi
+    rm -f -- "\$tmp"
+}
+export PATH="\$PATH:/home/camus/.local/bin"
+export PATH="$HOME/.cargo/bin:$PATH"
+eval "\$(zoxide init zsh)"
+alias ls='eza'
+alias ll='eza -alh'
+alias tree='eza --tree'
+alias cat='bat'
+alias cd='z'
+alias cdi='zi'
+alias cls='clear'
+alias dir='eza'
+alias nano='micro'
+alias neofetch='macchina'
+alias ping='gping'
+alias grep='rg'
+alias fd='find'
+alias here='explorer.exe .'
+treefetch -b
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+EOF
+)
+
+echo "$CONFIGURATIONS" >> ~/.zshrc
+print_bold "[+] Configurations added to ~/.zshrc."
 
 # Driver installations
 if [ "$install_nvidia_drivers" = "y" ]; then
@@ -220,21 +248,25 @@ if [ "$install_drivers" = "y" ]; then
     print_green "─────────────────────────────────────────────────────"
 fi
 
-# Cleanup
 print_green "─────────────────────────────────────────────────────"
 print_bold "[+] Cleaning up..."
 print_green "─────────────────────────────────────────────────────"
 ${sudo_cmd} apt-get clean
 ${sudo_cmd} apt-get autoremove -y
 
-zsh
-# shellcheck disable=SC1090
-source ~/.zshrc
+ZSH_PATH=$(which zsh)
+chsh -s "$ZSH_PATH"
+
+print_bold "Default shell changed to zsh. Please log out and log back in to see the changes."
 
 print_green "─────────────────────────────────────────────────────"
 print_bold "[+] Installation and configuration completed."
-print_bold "[!] Please run source ~/.zshrc to apply changes."
+# print_bold "[!] Please run source ~/.zshrc to apply changes."
 if [ "$install_drivers" = "y" ]; then
     print_alert "[!] Please restart your system to apply changes."
 fi
 print_green "─────────────────────────────────────────────────────"
+
+zsh
+# shellcheck disable=SC1090
+source ~/.zshrc
