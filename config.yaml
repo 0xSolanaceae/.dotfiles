@@ -1,9 +1,4 @@
-# tabby terminal config file
-version: 7
-groups: []
 hotkeys:
-  toggle-window:
-    - Ctrl-Space
   copy-current-path: []
   ctrl-c:
     - Ctrl-C
@@ -51,17 +46,15 @@ hotkeys:
     - Alt-PageDown
   scroll-to-bottom:
     - Ctrl-PageDown
-  restart-telnet-session: []
   restart-ssh-session: []
   launch-winscp: []
   settings-tab: {}
   settings:
     - Ctrl-,
-  serial:
-    - Alt-K
-  restart-serial-session: []
   new-tab:
     - Ctrl-Shift-T
+  toggle-window:
+    - Ctrl-Space
   new-window:
     - Ctrl-Shift-N
   profile: {}
@@ -166,8 +159,29 @@ hotkeys:
     - Ctrl-Shift-E
   command-selector:
     - Ctrl-Shift-P
+  restart-telnet-session: []
+  serial:
+    - Alt-K
+  restart-serial-session: []
 terminal:
-  searchOptions: {}
+  frontend: xterm
+  fontSize: 14
+  fontWeight: 400
+  fontWeightBold: 700
+  fallbackFont: null
+  linePadding: 0
+  bell: 'off'
+  bracketedPaste: true
+  background: theme
+  ligatures: true
+  cursorBlink: true
+  rightClick: clipboard
+  pasteOnMiddleClick: false
+  copyOnSelect: true
+  copyAsHTML: true
+  scrollOnInput: true
+  altIsMeta: false
+  wordSeparator: ' ()[]{}''"'
   colorScheme:
     name: Rose Pine
     foreground: '#e0def4'
@@ -190,32 +204,109 @@ terminal:
       - '#c4a7e7'
       - '#ebbcba'
       - '#e0def4'
+  lightColorScheme:
+    name: Tabby Default Light
+    foreground: '#4d4d4c'
+    background: '#ffffff'
+    cursor: '#4d4d4c'
+    colors:
+      - '#000000'
+      - '#c82829'
+      - '#718c00'
+      - '#eab700'
+      - '#4271ae'
+      - '#8959a8'
+      - '#3e999f'
+      - '#ffffff'
+      - '#000000'
+      - '#c82829'
+      - '#718c00'
+      - '#eab700'
+      - '#4271ae'
+      - '#8959a8'
+      - '#3e999f'
+      - '#ffffff'
   customColorSchemes: []
-  profile: local:wsl-Ubuntu
-  ligatures: true
-  fallbackFont: ''
-  copyOnSelect: false
   warnOnMultilinePaste: false
-  hideTabIndex: true
+  searchRegexAlwaysEnabled: false
+  searchOptions: {}
+  detectProgress: true
+  scrollbackLines: 25000
+  drawBoldTextInBrightColors: true
+  sixel: true
+  minimumContrastRatio: 4
+  trimWhitespaceOnPaste: true
+  font: Consolas
+  useConPTY: false
+  environment: {}
+  setComSpec: false
+  profile: local:clink
+  showBuiltinProfiles: true
+  showRecentProfiles: 3
+  paneResizeStep: 0.1
+  focusFollowsMouse: false
+  identification: wt
+  hideTabOptionsButton: true
 ssh:
   warnOnClose: true
-clickableLinks: {}
-accessibility: {}
+  winSCPPath: null
+  agentType: auto
+  agentPath: null
+  x11Display: null
+  knownHosts: []
+  verifyHostKeys: false
+configSync:
+  configID: null
+  auto: false
+  parts:
+    hotkeys: true
+    appearance: true
+    vault: true
+clickableLinks:
+  modifier: null
+accessibility:
+  animations: true
 appearance:
-  vibrancy: true
-  opacity: 0.87
-  spaciness: 1.1
-  lastTabClosesWindow: true
-hacks:
-  disableVibrancyWhileDragging: true
-  disableGPU: true
-providerBlacklist: []
-commandBlacklist: []
-enableAnalytics: false
-enableWelcomeTab: false
+  dockScreen: current
+  dockFill: 0.5
+  dockSpace: 1
+  dockHideOnBlur: false
+  dockAlwaysOnTop: true
+  tabsLocation: top
+  tabsInFullscreen: false
+  cycleTabs: true
+  theme: Follow the color scheme
+  frame: thin
+  css: '/* * { color: blue !important; } */'
+  opacity: 0.89
+  vibrancy: false
+  vibrancyType: blur
+  spaciness: 1
+  colorSchemeMode: dark
+profiles: []
+groups: []
 profileDefaults:
   ssh:
     disableDynamicTitle: true
+enableAnalytics: false
+enableWelcomeTab: false
+electronFlags:
+  - - force_discrete_gpu
+    - '0'
+enableAutomaticUpdates: true
+version: 7
+vault: null
+encrypted: false
+enableExperimentalFeatures: false
+commandBlacklist: []
+providerBlacklist: []
+profileBlacklist: []
+hacks:
+  disableGPU: false
+  disableVibrancyWhileDragging: false
+  enableFluentBackground: false
+language: null
+defaultQuickConnectProvider: ssh
 highlightPlugin:
   highlightProfiles:
     - id: 60606be0-c0ff-42bc-bf77-de8a2435447f
@@ -255,60 +346,4 @@ highlightPlugin:
         - enabled: true
           search: WARN
           replace: 警告警告
-profileBlacklist: []
-recoverTabs: false
-pluginBlacklist:
-  - fit-screen
-  - serial
-  - telnet
-profiles:
-  - type: local
-    name: ssh2sftp_win_template
-    icon: fas fa-terminal
-    options:
-      command: c:\Git\usr\bin\sftp.exe
-      env: {}
-      cwd: ''
-      args:
-        - '-oStrictHostKeyChecking=no'
-        - '-oServerAliveInterval=30'
-        - '-oServerAliveCountMax=1051200'
-        - '-oTCPKeepAlive=yes'
-    group: ssh2sftp_template
-    id: local:custom:ssh2sftp_win_template:c617da05-d05c-482d-8ca6-3c7eb99452e9
-    disableDynamicTitle: true
-    isTemplate: true
-  - type: local
-    name: ssh2sftp_linux_template
-    icon: fas fa-terminal
-    options:
-      command: /usr/bin/sftp
-      env: {}
-      cwd: ''
-      args:
-        - '-oStrictHostKeyChecking=no'
-        - '-oServerAliveInterval=30'
-        - '-oServerAliveCountMax=1051200'
-        - '-oTCPKeepAlive=yes'
-    group: ssh2sftp_template
-    id: local:custom:ssh2sftp_linux_template:6c4bcc75-f690-482a-a882-40e1c9851a3d
-    disableDynamicTitle: true
-    isTemplate: true
-  - type: local
-    name: ssh2sftp_mac_template
-    icon: fas fa-terminal
-    options:
-      command: /usr/local/opt/openssh/bin/sftp
-      args:
-        - '-oStrictHostKeyChecking=no'
-        - '-oServerAliveInterval=30'
-        - '-oServerAliveCountMax=1051200'
-        - '-oTCPKeepAlive=yes'
-      env: {}
-      cwd: ''
-    id: local:custom:ssh2sftp_mac_template:33162a26-7807-4c5e-ac2d-68cd2d9a4a24
-    group: ssh2sftp_template
-    disableDynamicTitle: true
-    isTemplate: true
-configSync:
-  parts: {}
+pluginBlacklist: []
