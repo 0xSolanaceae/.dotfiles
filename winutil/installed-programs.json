@@ -1,0 +1,262 @@
+{
+    "WPFTweaks":  [
+
+                  ],
+    "Install":  [
+                    {
+                        "winget":  "Microsoft.WindowsTerminal",
+                        "choco":  "microsoft-windows-terminal"
+                    },
+                    {
+                        "winget":  "WinSCP.WinSCP",
+                        "choco":  "winscp"
+                    },
+                    {
+                        "winget":  "BlenderFoundation.Blender",
+                        "choco":  "blender"
+                    },
+                    {
+                        "winget":  "CPUID.HWMonitor",
+                        "choco":  "hwmonitor"
+                    },
+                    {
+                        "winget":  "File-New-Project.EarTrumpet",
+                        "choco":  "eartrumpet"
+                    },
+                    {
+                        "winget":  "CrystalDewWorld.CrystalDiskMark",
+                        "choco":  "crystaldiskmark"
+                    },
+                    {
+                        "winget":  "Microsoft.Edge",
+                        "choco":  "microsoft-edge"
+                    },
+                    {
+                        "winget":  "Rainmeter.Rainmeter",
+                        "choco":  "na"
+                    },
+                    {
+                        "winget":  "Obsidian.Obsidian",
+                        "choco":  "obsidian"
+                    },
+                    {
+                        "winget":  "Microsoft.PowerToys",
+                        "choco":  "powertoys"
+                    },
+                    {
+                        "winget":  "TeamViewer.TeamViewer",
+                        "choco":  "teamviewer9"
+                    },
+                    {
+                        "winget":  "RamenSoftware.Windhawk",
+                        "choco":  "windhawk"
+                    },
+                    {
+                        "winget":  "RevoUninstaller.RevoUninstaller",
+                        "choco":  "revo-uninstaller"
+                    },
+                    {
+                        "winget":  "TechPowerUp.GPU-Z",
+                        "choco":  "gpu-z"
+                    },
+                    {
+                        "winget":  "Kitware.CMake",
+                        "choco":  "cmake"
+                    },
+                    {
+                        "winget":  "SublimeHQ.SublimeText.4",
+                        "choco":  "sublimetext4"
+                    },
+                    {
+                        "winget":  "tailscale.tailscale",
+                        "choco":  "tailscale"
+                    },
+                    {
+                        "winget":  "Spotify.Spotify",
+                        "choco":  "spotify"
+                    },
+                    {
+                        "winget":  "flux.flux",
+                        "choco":  "flux"
+                    },
+                    {
+                        "winget":  "Valve.Steam",
+                        "choco":  "steam-client"
+                    },
+                    {
+                        "winget":  "OpenSCAD.OpenSCAD",
+                        "choco":  "openscad"
+                    },
+                    {
+                        "winget":  "namazso.OpenHashTab",
+                        "choco":  "openhashtab"
+                    },
+                    {
+                        "winget":  "Microsoft.OneDrive",
+                        "choco":  "onedrive"
+                    },
+                    {
+                        "winget":  "MoonlightGameStreamingProject.Moonlight",
+                        "choco":  "moonlight-qt"
+                    },
+                    {
+                        "winget":  "REALiX.HWiNFO",
+                        "choco":  "hwinfo"
+                    },
+                    {
+                        "winget":  "voidtools.Everything",
+                        "choco":  "everything"
+                    },
+                    {
+                        "winget":  "Henry++.simplewall",
+                        "choco":  "simplewall"
+                    },
+                    {
+                        "winget":  "VideoLAN.VLC",
+                        "choco":  "vlc"
+                    },
+                    {
+                        "winget":  "Jellyfin.JellyfinMediaPlayer",
+                        "choco":  "jellyfin-media-player"
+                    },
+                    {
+                        "winget":  "qBittorrent.qBittorrent",
+                        "choco":  "qbittorrent"
+                    },
+                    {
+                        "winget":  "Microsoft.VisualStudioCode",
+                        "choco":  "vscode"
+                    },
+                    {
+                        "winget":  "DuongDieuPhap.ImageGlass",
+                        "choco":  "imageglass"
+                    },
+                    {
+                        "winget":  "Zoom.Zoom",
+                        "choco":  "zoom"
+                    },
+                    {
+                        "winget":  "Bitwarden.Bitwarden",
+                        "choco":  "bitwarden"
+                    },
+                    {
+                        "winget":  "Telegram.TelegramDesktop",
+                        "choco":  "telegram"
+                    },
+                    {
+                        "winget":  "Discord.Discord",
+                        "choco":  "discord"
+                    },
+                    {
+                        "winget":  "Eugeny.Tabby",
+                        "choco":  "tabby"
+                    },
+                    {
+                        "winget":  "RaspberryPiFoundation.RaspberryPiImager",
+                        "choco":  "rpi-imager"
+                    },
+                    {
+                        "winget":  "Git.Git",
+                        "choco":  "git"
+                    },
+                    {
+                        "winget":  "MHNexus.HxD",
+                        "choco":  "HxD"
+                    },
+                    {
+                        "winget":  "AdrienAllard.FileConverter",
+                        "choco":  "file-converter"
+                    },
+                    {
+                        "winget":  "CPUID.CPU-Z",
+                        "choco":  "cpu-z"
+                    },
+                    {
+                        "winget":  "Insecure.Nmap",
+                        "choco":  "nmap"
+                    },
+                    {
+                        "winget":  "RARLab.WinRAR",
+                        "choco":  "winrar"
+                    },
+                    {
+                        "winget":  "Balena.Etcher",
+                        "choco":  "etcher"
+                    },
+                    {
+                        "winget":  "Alex313031.Thorium.AVX2",
+                        "choco":  "na"
+                    },
+                    {
+                        "winget":  "Ablaze.Floorp",
+                        "choco":  "na"
+                    },
+                    {
+                        "winget":  "WiresharkFoundation.Wireshark",
+                        "choco":  "wireshark"
+                    },
+                    {
+                        "winget":  "ModernFlyouts.ModernFlyouts",
+                        "choco":  "na"
+                    },
+                    {
+                        "winget":  "Microsoft.Teams",
+                        "choco":  "microsoft-teams"
+                    }
+                ],
+    "WPFInstall":  [
+                       "WPFInstallterminal",
+                       "WPFInstallwinscp",
+                       "WPFInstallblender",
+                       "WPFInstallhwmonitor",
+                       "WPFInstalleartrumpet",
+                       "WPFInstallcrystaldiskmark",
+                       "WPFInstalledge",
+                       "WPFInstallrainmeter",
+                       "WPFInstallobsidian",
+                       "WPFInstallpowertoys",
+                       "WPFInstallteamviewer",
+                       "WPFInstallWindhawk",
+                       "WPFInstallrevo",
+                       "WPFInstallgpuz",
+                       "WPFInstallcmake",
+                       "WPFInstallsublimetext",
+                       "WPFInstalltailscale",
+                       "WPFInstallspotify",
+                       "WPFInstallflux",
+                       "WPFInstallsteam",
+                       "WPFInstallopenscad",
+                       "WPFInstallopenhashtab",
+                       "WPFInstallonedrive",
+                       "WPFInstallmoonlight",
+                       "WPFInstallhwinfo",
+                       "WPFInstallesearch",
+                       "WPFInstallsimplewall",
+                       "WPFInstallvlc",
+                       "WPFInstalljellyfinmediaplayer",
+                       "WPFInstallqbittorrent",
+                       "WPFInstallvscode",
+                       "WPFInstallimageglass",
+                       "WPFInstallzoom",
+                       "WPFInstallbitwarden",
+                       "WPFInstalltelegram",
+                       "WPFInstalldiscord",
+                       "WPFInstalltabby",
+                       "WPFInstallpiimager",
+                       "WPFInstallgit",
+                       "WPFInstallxeheditor",
+                       "WPFInstallfileconverter",
+                       "WPFInstallcpuz",
+                       "WPFInstallnmap",
+                       "WPFInstallwinrar",
+                       "WPFInstalletcher",
+                       "WPFInstallthorium",
+                       "WPFInstallfloorp",
+                       "WPFInstallwireshark",
+                       "WPFInstallModernFlyouts",
+                       "WPFInstallteams"
+                   ],
+    "WPFFeature":  [
+
+                   ]
+}
