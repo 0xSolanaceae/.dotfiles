@@ -1,0 +1,7 @@
+# Ignore Bitblake files
+*.bitblake export-ignore
+
+# Ignore Pascal files
+*.pas export-ignore
+*.pp export-ignore
+*.p export-ignore
