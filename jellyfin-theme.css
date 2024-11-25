@@ -1,0 +1,40 @@
+@import url("https://cdn.jsdelivr.net/gh/tedhinklater/finimalism@main/finimalism7.css");
+@import url("https://cdn.jsdelivr.net/gh/tedhinklater/finimalism@main/episode%20grid.css");
+
+/*Hide "Please sign in" text, margin is to prevent login form moving too far up*/
+#loginPage h1 {display: none}
+#loginPage .padded-left.padded-right.padded-bottom-page {margin-top: 10px}
+
+/*Change login page background, https://github.com/dharmx/walls/blob/main/abstract/a_blue_and_orange_background.jpg */
+#loginPage {
+    background: url(https://files.catbox.moe/0qi7fj.jpg) !important;
+    background-size: cover !important;
+}
+
+/*Hide the top bar when the login page is visible*/
+body:has(#loginPage:not(.hide)) .skinHeader {
+    display: none !important;
+}
+
+/*Show the top bar when the login page is hidden or absent*/
+body:not(:has(#loginPage:not(.hide))) .skinHeader {
+    display: flex !important;
+}
+
+/*Transparent top bar*/
+.skinHeader-withBackground {background-color: #20202000 !important;}
+
+/*Hide the "Trailers" tab in Movies and the "Upcoming" tab in TV Shows*/
+.emby-tab-button[data-index="2"] {
+  display: none !important;
+}
+
+/*If the logo is present on the details page of an item, hide the items' title*/
+#itemDetailPage .itemName.infoText.parentNameLast > bdi:nth-child(1) {display: none;}
+.hide+.detailPageWrapperContainer .itemName > bdi:nth-child(1) {display: block !important;}
+/*Do the same for the single episodes link back title*/
+#itemDetailPage .parentName > bdi:nth-child(1) {display: none;}
+.hide+.parentName > bdi:nth-child(1) {display: block !important;}
+
+/*Remove "My Media" title*/
+.section0 .sectionTitle {display: none;}
