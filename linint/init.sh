@@ -1,274 +1,233 @@
-#!/bin/bash
-# shellcheck disable=SC2016
+#!/usr/bin/env bash
 
-clear
-echo -e "\e[0m\c"
-set -e
+set -Eeuo pipefail
+trap cleanup SIGINT SIGTERM ERR EXIT
 
-export PATH=/usr/sbin:$PATH
-export DEBIAN_FRONTEND=noninteractive
-
-((EUID)) && sudo_cmd="sudo"
-
-readonly COLOUR_RESET='\e[0m'
-readonly aCOLOUR=(
-    '\e[38;5;154m' # green
-    '\e[1m'        # Bold white
-    '\e[90m'       # Grey
-    '\e[91m'       # Red
-    '\e[33m'       # Yellow
-)
-
-print_green() {
-    echo -e "${aCOLOUR[0]}$1${COLOUR_RESET}"
+cleanup() {
+    rm -rf "${TMP_DIR:-}"
+    exit
 }
 
-print_bold() {
-    echo -e "${aCOLOUR[1]}$1${COLOUR_RESET}"
+init_script() {
+    clear
+    readonly COLOUR_RESET=$(tput sgr0)
+    readonly COLOURS=(
+        "$(tput setaf 2)"  # Green
+        "$(tput bold)"      # Bold
+        "$(tput setaf 7)"   # White
+        "$(tput setaf 1)"   # Red
+        "$(tput setaf 3)"   # Yellow
+    )
+    
+    TMP_DIR=$(mktemp -d)
+    export DEBIAN_FRONTEND=noninteractive
+    check_sudo
 }
 
-print_grey() {
-    echo -e "${aCOLOUR[2]}$1${COLOUR_RESET}"
-}
-
-print_alert() {
-    echo -e "${aCOLOUR[3]}$1${COLOUR_RESET}"
-}
-
-print_emphasis() {
-    echo -e "${aCOLOUR[4]}$1${COLOUR_RESET}"
-}
-
-# User prompts
-print_emphasis "Do you want to install Nvidia Drivers? (y/n): "
-read -r install_nvidia_drivers
-
-print_emphasis "Do you want to install Network Adapter Drivers? (y/n): "
-read -r install_drivers
-
-print_emphasis "Do you want to fetch the closest repo mirrors? (y/n): "
-read -r fetch_mirror
-
-# System update
-print_green "─────────────────────────────────────────────────────"
-print_bold "[+] Updating system..."
-print_green "─────────────────────────────────────────────────────"
-print_grey "$(${sudo_cmd} apt-get update && ${sudo_cmd} apt-get upgrade -y)"
-print_grey "$(${sudo_cmd} apt install nala -y)"
-
-if [ "$fetch_mirror" = "y" ]; then
-    print_bold "[+] Fetching closest mirrors..."
-    ${sudo_cmd} nala fetch
-fi
-
-# Package installation
-print_green "─────────────────────────────────────────────────────"
-print_bold "[+] Installing packages..."
-print_green "─────────────────────────────────────────────────────"
-print_grey "${sudo_cmd} nala update && ${sudo_cmd} nala upgrade -y"
-
-print_grey "Installing: git, nmap, python3, curl, cmake, cargo, wget, etc..."
-${sudo_cmd} nala install -y \
-    git \
-    nmap \
-    python3 \
-    python3-pip \
-    curl \
-    cmake \
-    cargo \
-    wget \
-    net-tools \
-    openssh-server \
-    apache2 \
-    ca-certificates \
-    software-properties-common \
-    mokutil \
-    build-essential \
-    gcc \
-    libelf-dev \
-    lynx \
-    speedtest-cli \
-    dkms \
-    screenfetch \
-    zsh \
-    bat \
-    fd-find \
-    btop \
-    zsh-syntax-highlighting
-
-print_grey "${sudo_cmd} nala autoremove -y"
-print_grey "${sudo_cmd} apt clean"
-
-print_bold "[+] Creating symbolic links..."
-mkdir -p ~/.local/bin
-
-if [ ! -L ~/.local/bin/bat ]; then
-    ln -s /usr/bin/batcat ~/.local/bin/bat
-    echo "Symbolic link created for bat."
-else
-    echo "Symbolic link already exists, skipping."
-fi
-
-curl -fsSL https://neuralink.com/tsui/install.sh | bash
-
-# Rust installation
-print_green "─────────────────────────────────────────────────────"
-print_bold "[+] Installing Rust..."
-print_green "─────────────────────────────────────────────────────"
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s
-
-print_bold "[+] Installing Treefetch..."
-if [ -d "treefetch" ]; then
-  echo "Treefetch is already installed. Skipping installation."
-else
-    git clone https://github.com/angelofallars/treefetch.git
-    cd treefetch
-    cargo install --git https://github.com/angelofallars/treefetch
-    cd ~
-fi
-
-print_bold "[+] Installing additional tools..."
-
-cargo install thokr
-curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
-
-# Homebrew installation
-if ! command -v brew >/dev/null 2>&1; then
-    print_bold "[+] Installing Homebrew..."
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> "$HOME/.bashrc"
-    (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> "$HOME/.zshrc"
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
-
-# Docker installation
-if command -v docker &> /dev/null; then
-    print_bold "[!] Docker is already installed. Skipping installation."
-else
-    print_green "─────────────────────────────────────────────────────"
-    print_bold "[+] Installing Docker..."
-    print_green "─────────────────────────────────────────────────────"
-    print_grey "${sudo_cmd} nala update -y"
-    ${sudo_cmd} install -m 0755 -d /etc/apt/keyrings
-    print_grey "${sudo_cmd} curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc"
-    ${sudo_cmd} chmod a+r /etc/apt/keyrings/docker.asc
-
-    echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-    ${sudo_cmd} tee /etc/apt/sources.list.d/docker.list > /dev/null
-    ${sudo_cmd} apt-get update
-
-    print_grey "${sudo_cmd} nala install -y \
-        docker-ce \
-        docker-ce-cli \
-        containerd.io \
-        docker-buildx-plugin \
-        docker-compose-plugin"
-fi
-
-# Brew packages installation
-print_green "─────────────────────────────────────────────────────"
-print_bold "[+] Installing Brew packages..."
-print_green "─────────────────────────────────────────────────────"
-print_grey "Installing: gping, fzf, ripgrep, cbonsai, yazi, zsh-autosuggestions, micro, macchina, eza, bottom, fastfetch"
-brew install gping fzf ripgrep cbonsai yazi zsh-autosuggestions micro macchina eza bottom fastfetch
-
-# Oh-My-Zsh installation and configuration
-print_green "─────────────────────────────────────────────────────"
-print_bold "[+] Setting up Oh-My-Zsh..."
-print_green "─────────────────────────────────────────────────────"
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    print_bold "[+] Installing Oh-My-Zsh..."
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-fi
-
-sed -i 's/ZSH_THEME=".*"/ZSH_THEME="nanotech"/' ~/.zshrc
-
-ZSH_CUSTOM="${ZSH_CUSTOM:-~/.oh-my-zsh/custom}"
-ZSH_HIGHLIGHT_DIR="${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting"
-
-if [ -d "$ZSH_HIGHLIGHT_DIR" ]; then
-  echo "zsh-syntax-highlighting is already installed. Continuing..."
-else
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_HIGHLIGHT_DIR"
-fi
-
-if ! grep -q "zsh-syntax-highlighting" "$HOME/.zshrc"; then
-    print_bold "[+] Adding zsh-syntax-highlighting to .zshrc plugins..."
-    echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
-else
-    print_grey "[-] zsh-syntax-highlighting is already present in .zshrc plugins."
-fi
-
-print_bold "[+] Adding configurations to ~/.zshrc..."
-CONFIGURATIONS=$(cat <<EOF
-function yy() {
-    local tmp="\$(mktemp -t "yazi-cwd.XXXXXX")"
-    yazi "\$@" --cwd-file="\$tmp"
-    if cwd="\$(cat -- "\$tmp")" && [ -n "\$cwd" ] && [ "\$cwd" != "\$PWD" ]; then
-        cd -- "\$cwd"
+check_sudo() {
+    if ((EUID)) && ! sudo -n true 2>/dev/null; then
+        print_alert "This script requires root privileges. Please enter your password:"
+        sudo -v
     fi
-    rm -f -- "\$tmp"
 }
-export PATH="\$PATH:/home/camus/.local/bin"
-export PATH="$HOME/.cargo/bin:$PATH"
-eval "\$(zoxide init zsh)"
-alias ls='eza'
-alias ll='eza -alh'
-alias tree='eza --tree'
-alias cat='bat'
-alias cd='z'
-alias cdi='zi'
-alias cls='clear'
-alias dir='eza'
-alias nano='micro'
-alias neofetch='macchina'
-alias ping='gping'
-alias grep='rg'
-alias fd='find'
-alias here='explorer.exe .'
-treefetch -b
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-EOF
-)
 
-echo "$CONFIGURATIONS" >> ~/.zshrc
-print_bold "[+] Configurations added to ~/.zshrc."
+print_green()  { echo -e "${COLOURS[0]}${1}${COLOUR_RESET}"; }
+print_bold()   { echo -e "${COLOURS[1]}${1}${COLOUR_RESET}"; }
+print_grey()   { echo -e "${COLOURS[2]}${1}${COLOUR_RESET}"; }
+print_alert()  { echo -e "${COLOURS[3]}${1}${COLOUR_RESET}"; }
+print_yellow() { echo -e "${COLOURS[4]}${1}${COLOUR_RESET}"; }
 
-# Driver installations
-if [ "$install_nvidia_drivers" = "y" ]; then
+confirm() {
+    local prompt="$1"
+    while true; do
+        print_yellow "${prompt} [y/n]: "
+        read -r response
+        case "${response}" in
+            [yY]) return 0 ;;
+            [nN]) return 1 ;;
+            *) print_alert "Invalid input. Please enter y or n." ;;
+        esac
+    done
+}
+
+system_update() {
     print_green "─────────────────────────────────────────────────────"
-    print_bold "[+] Installing Nvidia drivers..."
+    print_bold "[+] Updating system packages..."
     print_green "─────────────────────────────────────────────────────"
-    ${sudo_cmd} ubuntu-drivers autoinstall
-fi
+    sudo nala update
+    sudo nala upgrade
+    sudo nala full-upgrade
+}
 
-if [ "$install_drivers" = "y" ]; then
+install_base_packages() {
     print_green "─────────────────────────────────────────────────────"
-    print_bold "[+] Installing network adapter drivers..."
+    print_bold "[+] Installing base packages..."
     print_green "─────────────────────────────────────────────────────"
-fi
+    
+    sudo nala install -y \
+        git nmap python3 python3-pip curl cmake cargo wget \
+        net-tools openssh-server apache2 ca-certificates \
+        software-properties-common mokutil build-essential \
+        gcc libelf-dev lynx speedtest-cli dkms screenfetch \
+        zsh bat fd-find btop micro \
+        zoxide ripgrep gping eza pipx
+    
+    sudo nala autoremove -y
+    sudo apt clean
 
-print_green "─────────────────────────────────────────────────────"
-print_bold "[+] Cleaning up..."
-print_green "─────────────────────────────────────────────────────"
-${sudo_cmd} apt-get clean
-${sudo_cmd} apt-get autoremove -y
+    pipx install poetry --quiet
 
-ZSH_PATH=$(which zsh)
-chsh -s "$ZSH_PATH"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-print_bold "Default shell changed to zsh. Please log out and log back in to see the changes."
+    echo >> "$HOME/.zshrc"
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME/.zshrc"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-print_green "─────────────────────────────────────────────────────"
-print_bold "[+] Installation and configuration completed."
-# print_bold "[!] Please run source ~/.zshrc to apply changes."
-if [ "$install_drivers" = "y" ]; then
-    print_alert "[!] Please restart your system to apply changes."
-fi
-print_green "─────────────────────────────────────────────────────"
+    brew install zsh-autosuggestions gcc
+    sed -i 's|$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh|/home/linuxbrew/.linuxbrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh|' ~/.zshrc
+}
 
-zsh
-# shellcheck disable=SC1090
-source ~/.zshrc
+configure_bat() {
+    local bat_path="/usr/bin/batcat"
+    local symlink_path="${HOME}/.local/bin/bat"
+    
+    if [ ! -L "${symlink_path}" ] && [ -f "${bat_path}" ]; then
+        mkdir -p ~/.local/bin
+        ln -sf "${bat_path}" "${symlink_path}"
+        print_green "Created bat symlink"
+    fi
+}
+
+install_nala() {
+    if ! command -v nala &> /dev/null; then
+        print_green "─────────────────────────────────────────────────────"
+        print_bold "[+] Installing Nala..."
+        print_green "─────────────────────────────────────────────────────"
+        
+        sudo apt update
+        sudo apt install -y nala
+    fi
+}
+
+install_rust() {
+    if ! command -v rustc &> /dev/null; then
+        print_green "─────────────────────────────────────────────────────"
+        print_bold "[+] Installing Rust..."
+        print_green "─────────────────────────────────────────────────────"
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source "${HOME}/.cargo/env"
+    fi
+}
+
+install_docker() {
+    if ! command -v docker &> /dev/null; then
+        print_green "─────────────────────────────────────────────────────"
+        print_bold "[+] Installing Docker..."
+        print_green "─────────────────────────────────────────────────────"
+        
+        sudo install -m 0755 -d /etc/apt/keyrings
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        sudo chmod a+r /etc/apt/keyrings/docker.gpg
+        
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+        https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        
+        sudo nala update
+        sudo nala install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        sudo usermod -aG docker "${USER}"
+    fi
+}
+
+configure_zsh() {
+    print_green "─────────────────────────────────────────────────────"
+    print_bold "[+] Configuring ZSH..."
+    print_green "─────────────────────────────────────────────────────"
+    
+    if [ ! -d "${HOME}/.oh-my-zsh" ]; then
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    fi
+    
+    local zshrc="${HOME}/.zshrc"
+    local zsh_custom="${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}"
+    
+    clone_repo "https://github.com/zsh-users/zsh-syntax-highlighting.git" \
+        "${zsh_custom}/plugins/zsh-syntax-highlighting"
+    
+    sed -i 's/ZSH_THEME=".*"/ZSH_THEME="nanotech"/' "${zshrc}"
+    
+    local configs=(
+        'alias ls="eza"'
+        'alias ll="eza -alh"'
+        'alias tree="eza --tree"'
+        'alias cat="bat"'
+        'alias cd="z"'
+        'alias cdi="zi"'
+        'alias cls="clear"'
+        'alias dir="eza"'
+        'alias nano="micro"'
+        'alias neofetch="macchina"'
+        'alias ping="gping"'
+        'alias grep="rg"'
+        'alias fd="find"'
+        'alias here="explorer.exe ."'
+        'eval "$(zoxide init zsh)"'
+        'source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"'
+        'treefetch'
+        'export PATH="$HOME/.cargo/bin:$PATH"'
+        'export PATH="$HOME/.local/bin:$PATH"'
+    )
+    
+    for config in "${configs[@]}"; do
+        if ! grep -qF "${config}" "${zshrc}"; then
+            echo "${config}" >> "${zshrc}"
+        fi
+    done
+}
+
+clone_repo() {
+    local repo_url="$1"
+    local target_dir="$2"
+    
+    if [ ! -d "${target_dir}" ]; then
+        git clone --depth 1 "${repo_url}" "${target_dir}"
+    fi
+}
+
+main() {
+    init_script
+    
+    install_nala
+    system_update
+    
+    if confirm "Fetch closest repository mirrors"; then
+        sudo nala fetch
+    fi
+    
+    install_base_packages
+    configure_bat
+    
+    if confirm "Install Nvidia drivers"; then
+        sudo ubuntu-drivers autoinstall
+    fi
+    
+    install_rust
+    install_docker
+    configure_zsh
+
+    cargo install --git https://github.com/angelofallars/treefetch
+    
+    print_green "─────────────────────────────────────────────────────"
+    print_bold "[+] Cleanup and final configuration..."
+    print_green "─────────────────────────────────────────────────────"
+    
+    if command -v zsh &> /dev/null && [ "$SHELL" != "$(command -v zsh)" ]; then
+        sudo chsh -s "$(command -v zsh)" "${USER}"
+        print_green "Default shell changed to ZSH"
+    fi
+    
+    print_green "Script completed successfully!"
+    print_yellow "Note: Some changes may require a system restart"
+}
+
+main
