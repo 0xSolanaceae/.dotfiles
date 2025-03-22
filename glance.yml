@@ -50,7 +50,7 @@ pages:
           - type: search
             autofocus: true
             search-engine: google
-            new-tab: true
+            new-tab: false
             bangs:
               - title: YouTube
                 shortcut: "!yt"
@@ -71,6 +71,10 @@ pages:
                 url: https://jellyfin.pangolin-morpho.ts.net/
                 check-url: https://jellyfin.pangolin-morpho.ts.net/
                 icon: di:jellyfin
+              - title: Unraid
+                url: https://andromeda.pangolin-morpho.ts.net/
+                check-url: https://andromeda.pangolin-morpho.ts.net/
+                icon: di:unraid
                 alt-status-codes:
                   - 401
                   - 403
