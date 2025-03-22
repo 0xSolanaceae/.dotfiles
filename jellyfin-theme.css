@@ -1,4 +1,4 @@
-@import url("https://cdn.jsdelivr.net/gh/tedhinklater/finimalism@main/finimalism7.css");
+@import url("https://cdn.jsdelivr.net/gh/lscambo13/ElegantFin@main/Theme/ElegantFin-jellyfin-theme-build-latest-minified.css");
 
 /*Hide "Please sign in" text, margin is to prevent login form moving too far up*/
 #loginPage h1 {display: none}
