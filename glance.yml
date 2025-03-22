@@ -1,0 +1,104 @@
+theme:
+  background-color: 240 21 15
+  contrast-multiplier: 1.2
+  primary-color: 217 92 83
+  positive-color: 115 54 76
+  negative-color: 347 70 65
+pages:
+  - name: Home
+    hide-desktop-navigation: false
+    center-vertically: true
+    columns:
+      - size: small
+        widgets:
+          - type: custom-api
+            title: Immich stats
+            cache: 1d
+            url: https://immich.pangolin-morpho.ts.net/api/server/statistics
+            headers:
+              x-api-key: vVi6c8xd5fEjgDfI1gdCFh9cB4UkOYVNzPBSl36Ik
+              Accept: application/json
+            template: |
+              <div class="flex justify-between text-center">
+                <div>
+                    <div class="color-highlight size-h3">{{ .JSON.Int "photos" | formatNumber }}</div>
+                    <div class="size-h6">PHOTOS</div>
+                </div>
+                <div>
+                    <div class="color-highlight size-h3">{{ .JSON.Int "videos" | formatNumber }}</div>
+                    <div class="size-h6">VIDEOS</div>
+                </div>
+                <div>
+                    <div class="color-highlight size-h3">{{ div (.JSON.Int "usage" | toFloat) 1073741824 | toInt | formatNumber }}GB</div>
+                    <div class="size-h6">USAGE</div>
+                </div>
+              </div>
+
+          - type: repository
+            repository: 0xSolanaceae/proXXy
+            pull-requests-limit: 5
+            issues-limit: 3
+            commits-limit: 3
+          - type: repository
+            repository: 0xSolanaceae/discord-imhex
+            pull-requests-limit: 5
+            issues-limit: 3
+            commits-limit: 3
+
+      - size: full
+        widgets:
+          - type: search
+            autofocus: true
+            search-engine: google
+            new-tab: false
+            bangs:
+              - title: YouTube
+                shortcut: "!yt"
+                url: https://www.youtube.com/results?search_query={QUERY}
+              - title: Github
+                shortcut: "!gh"
+                url: https://github.com/search?q={QUERY}&type=repositories
+
+          - type: monitor
+            cache: 1m
+            title: Services
+            sites:
+              - title: Immich
+                url: https://immich.pangolin-morpho.ts.net/
+                check-url: https://immich.pangolin-morpho.ts.net/
+                icon: di:immich
+              - title: Jellyfin
+                url: https://jellyfin.pangolin-morpho.ts.net/
+                check-url: https://jellyfin.pangolin-morpho.ts.net/
+                icon: di:jellyfin
+              - title: Unraid
+                url: https://andromeda.pangolin-morpho.ts.net/
+                check-url: https://andromeda.pangolin-morpho.ts.net/
+                icon: di:unraid
+                alt-status-codes:
+                  - 401
+                  - 403
+
+          - type: videos
+            channels:
+              - UClyGlKOhDUooPJFy4v_mqPg # DougDoug
+              - UCR-DXc1voovS8nhAvccRZhg # Jeff Geerling
+              - UCsBjURrPoezykLs9EqgamOA # Fireship
+              - UCBJycsmduvYEL83R_U4JriQ # Marques Brownlee
+
+      - size: small
+        widgets:
+          - type: weather
+            location: 04101
+            units: imperial
+            hour-format: 12h
+
+          - type: markets
+            symbol-link-template: https://www.tradingview.com/symbols/{SYMBOL}/news
+            markets:
+              - symbol: VOO
+                name: Vanguard S&P 500 ETF
+              - symbol: VTI
+                name: Vanguard Total Stock Market ETF
+              - symbol: VXUS
+                name: Vanguard Total International Stock ETF
