@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jellyfin Migration</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1f1d2e;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: #e0def4;
+        }
+        .container {
+            background: #191724;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .countdown {
+            font-size: 2em;
+            margin: 20px 0;
+            color: #89b4fa;
+        }
+        a {
+            color: #89b4fa;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Jellyfin Migration</h1>
+        <p>The Jellyfin server has been migrated. Please use the new server link below:</p>
+        <p><a href="https://jellyfin.pangolin-morpho.ts.net/">https://jellyfin.pangolin-morpho.ts.net/</a></p>
+        <p><a href="https://jellyfin.pangolin-morpho.ts.net/" id="redirect-link">You will be redirected shortly, or click here to redirect now</a></p>
+        <div class="countdown" id="countdown">30</div>
+    </div>
+    <script>
+        let countdownElement = document.getElementById('countdown');
+        let countdown = 30;
+        let interval = setInterval(() => {
+            countdown--;
+            countdownElement.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(interval);
+                window.location.href = 'https://jellyfin.pangolin-morpho.ts.net/';
+            }
+        }, 1000);
+        document.getElementById('redirect-link').addEventListener('click', () => {
+            clearInterval(interval);
+        });
+    </script>
+</body>
+</html>

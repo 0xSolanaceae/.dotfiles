@@ -83,6 +83,7 @@ pages:
                 url: https://myspeed.pangolin-morpho.ts.net/
                 check-url: https://myspeed.pangolin-morpho.ts.net/
                 icon: di:myspeed
+
                 alt-status-codes:
                   - 401
                   - 403
