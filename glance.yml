@@ -61,7 +61,7 @@ pages:
 
           - type: monitor
             cache: 1m
-            title: Services
+            title: Services # for icons: https://github.com/homarr-labs/dashboard-icons/blob/main/ICONS.md
             sites:
               - title: Immich
                 url: https://immich.pangolin-morpho.ts.net/
@@ -75,6 +75,14 @@ pages:
                 url: https://andromeda.pangolin-morpho.ts.net/
                 check-url: https://andromeda.pangolin-morpho.ts.net/
                 icon: di:unraid
+              - title: Tandoor
+                url: https://tandoor.pangolin-morpho.ts.net/
+                check-url: https://tandoor.pangolin-morpho.ts.net/
+                icon: di:tandoor-recipes
+              - title: myspeed
+                url: https://myspeed.pangolin-morpho.ts.net/
+                check-url: https://myspeed.pangolin-morpho.ts.net/
+                icon: di:myspeed
                 alt-status-codes:
                   - 401
                   - 403
