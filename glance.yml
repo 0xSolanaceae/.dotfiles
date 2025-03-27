@@ -101,9 +101,12 @@ pages:
           - type: videos
             channels:
               - UClyGlKOhDUooPJFy4v_mqPg # DougDoug
-              - UCR-DXc1voovS8nhAvccRZhg # Jeff Geerling
-              - UCsBjURrPoezykLs9EqgamOA # Fireship
-              - UCBJycsmduvYEL83R_U4JriQ # Marques Brownlee
+              - UCDq5v10l4wkV5-ZBIJJFbzQ # Ethan Chlebowski
+              - UCnB5HTIi44wDBD56KeT2hNA # Guga
+              - UCfE5Cz44GlZVyoaYTHJbuZw # Guga Foods
+              - UC_S45UpAYVuc0fYEcHN9BVQ # Boy Boy
+              - UCweDKPSF65wRw5VHFUJYiow # Curious Archive
+              - UCWFKCr40YwOZQx8FHU_ZqqQ # Jerry Rig Everything
 
       - size: small
         widgets:
