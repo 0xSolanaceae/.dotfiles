@@ -82,14 +82,14 @@ pages:
                 url: https://tandoor.pangolin-morpho.ts.net/
                 check-url: https://tandoor.pangolin-morpho.ts.net/
                 icon: di:tandoor-recipes
-              - title: myspeed
+              - title: MySpeed
                 url: https://myspeed.pangolin-morpho.ts.net/
                 check-url: https://myspeed.pangolin-morpho.ts.net/
                 icon: di:myspeed
               - title: PiKVM
                 url: https://100.66.28.100/
                 check-url: https://100.66.28.100/
-                icon: di:pikvm
+                icon: di:cloudflare # pikvm was removed for some reason
                 allow-insecure: true
               - title: Crafty
                 url: https://100.78.140.51:8443/
