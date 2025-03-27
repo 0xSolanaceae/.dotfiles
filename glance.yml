@@ -58,6 +58,9 @@ pages:
               - title: Github
                 shortcut: "!gh"
                 url: https://github.com/search?q={QUERY}&type=repositories
+              - title: Reddit
+                shortcut: "!r"
+                url: https://www.reddit.com/search/?q={QUERY}
 
           - type: monitor
             cache: 1m
