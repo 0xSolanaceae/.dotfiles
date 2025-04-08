@@ -89,7 +89,7 @@ pages:
               - title: PiKVM
                 url: https://100.66.28.100/
                 check-url: https://100.66.28.100/
-                icon: di:pikvm # pikvm was removed for some reason
+                icon: di:pikvm-light # https://github.com/homarr-labs/dashboard-icons/pull/1133
                 allow-insecure: true
               - title: Crafty
                 url: https://100.78.140.51:8443/
