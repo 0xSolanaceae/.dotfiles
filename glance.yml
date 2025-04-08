@@ -89,7 +89,7 @@ pages:
               - title: PiKVM
                 url: https://100.66.28.100/
                 check-url: https://100.66.28.100/
-                icon: di:cloudflare # pikvm was removed for some reason
+                icon: di:pikvm # pikvm was removed for some reason
                 allow-insecure: true
               - title: Crafty
                 url: https://100.78.140.51:8443/
@@ -125,5 +125,9 @@ pages:
                 name: Vanguard S&P 500 ETF
               - symbol: VTI
                 name: Vanguard Total Stock Market ETF
-              - symbol: VXUS
-                name: Vanguard Total International Stock ETF
+              - symbol: QQQM
+                name: Invesco QQQM ETF
+              - symbol: QQQ
+                name: Invesco QQQ ETF
+              - symbol: SPY
+                name: SPDR S&P 500 ETF Trust
