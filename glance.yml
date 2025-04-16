@@ -34,13 +34,36 @@ pages:
                 </div>
               </div>
 
+          - type: custom-api
+            title: Today's Meal
+            cache: 1m
+            url: https://mealie.pangolin-morpho.ts.net/api/households/mealplans/today
+            headers:
+              Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb25nX3Rva2VuIjp0cnVlLCJpZCI6ImExNzAyOWYzLWQ1MWEtNDhiZi05NDdmLTRkYTdhNTY1YTMxMyIsIm5hbWUiOiJnbGFuY2UiLCJpbnRlZ3JhdGlvbl9pZCI6ImdlbmVyaWMiLCJleHAiOjE5MDI1MDMyNDN9.steWIxS0nKrcdGbk0ky4hpFK6t2S_g4lQ0au5SzLwFM
+            template: |
+              <div class="flex gap-15 justify-between">
+                {{ range .JSON.Array "" }}
+                  <div class="card widget-content-frame flex-1" style="min-width: 0; max-width: calc(50% - 7.5px);">
+                    <div class="absolute" style="top: 10px; left: 10px; background-color: var(--color-widget-background); padding: 4px 8px; border-radius: var(--border-radius); z-index: 1;">
+                      <span class="size-h5 uppercase color-primary">{{.String "entryType"}}</span>
+                    </div>
+                    <div class="relative" style="height: 180px; overflow: hidden; border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                      <img src="https://mealie.pangolin-morpho.ts.net/api/media/recipes/{{.String "recipeId"}}/images/original.webp" 
+                          class="max-width-100" style="width: 100%; height: 100%; object-fit: cover;"/>
+                    </div>
+                    <div class="padding-block-5 padding-inline-widget">
+                      <h3 class="size-h3 color-highlight margin-block-5 text-truncate">{{.String "recipe.name"}}</h3>
+                    </div>
+                  </div>
+                {{ else }}
+                  <p class="text-center color-subdue padding-block-5 flex-1">No meals planned for today</p>
+                {{ end }}
+              </div>
+          
+
+
           - type: repository
             repository: 0xSolanaceae/proXXy
-            pull-requests-limit: 5
-            issues-limit: 3
-            commits-limit: 3
-          - type: repository
-            repository: 0xSolanaceae/discord-imhex
             pull-requests-limit: 5
             issues-limit: 3
             commits-limit: 3
@@ -66,31 +89,31 @@ pages:
             cache: 1m
             title: Services # for icons: https://github.com/homarr-labs/dashboard-icons/blob/main/ICONS.md
             sites:
-              - title: Immich
-                url: https://immich.pangolin-morpho.ts.net/
-                check-url: https://immich.pangolin-morpho.ts.net/
-                icon: di:immich
-              - title: Jellyfin
-                url: https://jellyfin.pangolin-morpho.ts.net/
-                check-url: https://jellyfin.pangolin-morpho.ts.net/
-                icon: di:jellyfin
               - title: Unraid
                 url: https://andromeda.pangolin-morpho.ts.net/
                 check-url: https://andromeda.pangolin-morpho.ts.net/
                 icon: di:unraid
-              - title: Tandoor
-                url: https://tandoor.pangolin-morpho.ts.net/
-                check-url: https://tandoor.pangolin-morpho.ts.net/
-                icon: di:tandoor-recipes
-              - title: MySpeed
-                url: https://myspeed.pangolin-morpho.ts.net/
-                check-url: https://myspeed.pangolin-morpho.ts.net/
-                icon: di:myspeed
+              - title: Immich
+                url: https://immich.pangolin-morpho.ts.net/
+                check-url: https://immich.pangolin-morpho.ts.net/
+                icon: di:immich
               - title: PiKVM
                 url: https://100.66.28.100/
                 check-url: https://100.66.28.100/
                 icon: di:pikvm-light # https://github.com/homarr-labs/dashboard-icons/pull/1133
                 allow-insecure: true
+              - title: Jellyfin
+                url: https://jellyfin.pangolin-morpho.ts.net/
+                check-url: https://jellyfin.pangolin-morpho.ts.net/
+                icon: di:jellyfin
+              - title: Mealie
+                url: https://mealie.pangolin-morpho.ts.net/
+                check-url: https://mealie.pangolin-morpho.ts.net/
+                icon: di:mealie
+              - title: MySpeed
+                url: https://myspeed.pangolin-morpho.ts.net/
+                check-url: https://myspeed.pangolin-morpho.ts.net/
+                icon: di:myspeed
               - title: Crafty
                 url: https://100.78.140.51:8443/
                 check-url: https://100.78.140.51:8443/
@@ -104,11 +127,14 @@ pages:
           - type: videos
             channels:
               - UClyGlKOhDUooPJFy4v_mqPg # DougDoug
+              - UC5sc1ysFs7RfjjEFMuQ3ZQw # DougDougDoug
               - UCDq5v10l4wkV5-ZBIJJFbzQ # Ethan Chlebowski
               - UCnB5HTIi44wDBD56KeT2hNA # Guga
               - UCfE5Cz44GlZVyoaYTHJbuZw # Guga Foods
               - UC_S45UpAYVuc0fYEcHN9BVQ # Boy Boy
+              - UCLe_q9axMaeTbjN0hy1Z9xA # Caleb Hammer
               - UCweDKPSF65wRw5VHFUJYiow # Curious Archive
+              - UCeTfBygNb1TahcNpZyELO8g # Jacob Geller
               - UCWFKCr40YwOZQx8FHU_ZqqQ # Jerry Rig Everything
 
       - size: small
@@ -123,10 +149,10 @@ pages:
             markets:
               - symbol: VOO
                 name: Vanguard S&P 500 ETF
-              - symbol: VTI
-                name: Vanguard Total Stock Market ETF
               - symbol: QQQM
                 name: Invesco QQQM ETF
+              - symbol: VTI
+                name: Vanguard Total Stock Market ETF
               - symbol: QQQ
                 name: Invesco QQQ ETF
               - symbol: SPY
