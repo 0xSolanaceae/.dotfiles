@@ -106,6 +106,10 @@ pages:
                 url: https://jellyfin.pangolin-morpho.ts.net/
                 check-url: https://jellyfin.pangolin-morpho.ts.net/
                 icon: di:jellyfin
+              - title: Jellyseerr
+                url: https://jellyseerr.pangolin-morpho.ts.net/
+                check-url: https://jellyseerr.pangolin-morpho.ts.net/
+                icon: di:jellyseerr
               - title: Mealie
                 url: https://mealie.pangolin-morpho.ts.net/
                 check-url: https://mealie.pangolin-morpho.ts.net/
