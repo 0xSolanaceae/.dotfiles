@@ -119,8 +119,8 @@ pages:
                 check-url: https://myspeed.pangolin-morpho.ts.net/
                 icon: di:myspeed
               - title: Crafty
-                url: https://100.78.140.51:8443/
-                check-url: https://100.78.140.51:8443/
+                url: https://100.87.123.12:8443/
+                check-url: https://100.87.123.12:8443/
                 icon: di:crafty-controller
                 allow-insecure: true
 
@@ -135,11 +135,21 @@ pages:
               - UCDq5v10l4wkV5-ZBIJJFbzQ # Ethan Chlebowski
               - UCnB5HTIi44wDBD56KeT2hNA # Guga
               - UCfE5Cz44GlZVyoaYTHJbuZw # Guga Foods
+              - UC_pT_Iz6XjuM-eMTlXghdfw # Max the Meat Guy
+              - UCn5fhcGRrCvrmFibPbT6q1A # Brian Lagerstrom
               - UC_S45UpAYVuc0fYEcHN9BVQ # Boy Boy
-              - UCLe_q9axMaeTbjN0hy1Z9xA # Caleb Hammer
+              - UCJLZe_NoiG0hT7QCX_9vmqw # I did a thing
               - UCweDKPSF65wRw5VHFUJYiow # Curious Archive
               - UCeTfBygNb1TahcNpZyELO8g # Jacob Geller
               - UCWFKCr40YwOZQx8FHU_ZqqQ # Jerry Rig Everything
+              - UCuo9VyowIT-ljA5G2ZuC6Yw # Eddy Burback
+              - UC7zsxKqd5MicTf4VhS9Y74g # Kurtis Connor
+              - UCSUf5_EPEfl4zlBKZHkZdmw # Danny Gonzalez
+              - UCTSRIY3GLFYIpkR2QwyeklA # Drew Gooden
+              - UCvK4bOhULCpmLabd2pDMtnA # Yes Theory
+              - UCiSVf-UpLC9rRjAT1qRTW0g # Forge Labs
+              - UCfpCQ89W9wjkHc8J_6eTbBg # Outdoor Boys
+              - UCFhXFikryT4aFcLkLw2LBLA # NileRed
 
       - size: small
         widgets:
