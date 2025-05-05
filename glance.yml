@@ -125,7 +125,7 @@ pages:
                 allow-insecure: true
               - title: Tailscale
                 url: https://login.tailscale.com/
-                check-url: https://login.tailscale.com/
+                check-url: https://tailscale.com/
                 icon: di:tailscale-light
 
                 alt-status-codes:
