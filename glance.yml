@@ -123,6 +123,10 @@ pages:
                 check-url: https://100.87.123.12:8443/
                 icon: di:crafty-controller
                 allow-insecure: true
+              - title: Tailscale
+                url: https://login.tailscale.com/
+                check-url: https://login.tailscale.com/
+                icon: di:tailscale-light
 
                 alt-status-codes:
                   - 401
