@@ -16,7 +16,7 @@ pages:
             cache: 1d
             url: https://immich.pangolin-morpho.ts.net/api/server/statistics
             headers:
-              x-api-key: vVi6c8xd5fEjgDfI1gdCFh9cB4UkOYVNzPBSl36Ik
+              x-api-key: xAxZaskfGgdIwaSu4EZmZnYJScDa16p6gJeU5YUiCmQ
               Accept: application/json
             template: |
               <div class="flex justify-between text-center">
@@ -173,5 +173,5 @@ pages:
                 name: Vanguard Total Stock Market ETF
               - symbol: QQQ
                 name: Invesco QQQ ETF
-              - symbol: SPY
-                name: SPDR S&P 500 ETF Trust
+              - symbol: SCHD
+                name: Schwab U.S. Dividend Equity ETF
