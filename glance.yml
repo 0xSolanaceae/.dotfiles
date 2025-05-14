@@ -1,13 +1,44 @@
 theme:
-  background-color: 240 21 15
-  contrast-multiplier: 1.2
-  primary-color: 217 92 83
-  positive-color: 115 54 76
-  negative-color: 347 70 65
+  presets:
+    neon-focus:
+      background-color: 255 14 6
+      primary-color: 156 50 65
+      negative-color: 342 65 65
+      contrast-multiplier: 0.9
+      text-saturation-multiplier: 0.8
+
+    gruvbox-dark:
+      background-color: 0 0 16
+      contrast-multiplier: 1.2
+      primary-color: 43 59 81
+      positive-color: 61 66 44
+      negative-color: 6 96 59
+
+    catppuccin-macchiato:
+      background-color: 232 23 18
+      contrast-multiplier: 1.2
+      primary-color: 220 83 75
+      positive-color: 105 48 72
+      negative-color: 351 74 73
+
 pages:
-  - name: Home
-    hide-desktop-navigation: false
-    center-vertically: true
+  - name: Node
+    head-widgets:
+    - type: markets
+      hide-header: true
+      symbol-link-template: https://www.tradingview.com/symbols/{SYMBOL}/news
+      markets:
+        - symbol: VOO
+          name: Vanguard S&P 500 ETF
+        - symbol: QQQM
+          name: Invesco QQQM ETF
+        - symbol: VTI
+          name: Vanguard Total Stock Market ETF
+        - symbol: QQQ
+          name: Invesco QQQ ETF
+        - symbol: SCHD
+          name: Schwab U.S. Dividend Equity ETF
+
     columns:
       - size: small
         widgets:
@@ -33,34 +64,7 @@ pages:
                     <div class="size-h6">USAGE</div>
                 </div>
               </div>
-
-          - type: custom-api
-            title: Today's Meal
-            cache: 1m
-            url: https://mealie.pangolin-morpho.ts.net/api/households/mealplans/today
-            headers:
-              Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb25nX3Rva2VuIjp0cnVlLCJpZCI6ImExNzAyOWYzLWQ1MWEtNDhiZi05NDdmLTRkYTdhNTY1YTMxMyIsIm5hbWUiOiJnbGFuY2UiLCJpbnRlZ3JhdGlvbl9pZCI6ImdlbmVyaWMiLCJleHAiOjE5MDI1MDMyNDN9.steWIxS0nKrcdGbk0ky4hpFK6t2S_g4lQ0au5SzLwFM
-            template: |
-              <div class="flex gap-15 justify-between">
-                {{ range .JSON.Array "" }}
-                  <div class="card widget-content-frame flex-1" style="min-width: 0; max-width: calc(50% - 7.5px);">
-                    <div class="absolute" style="top: 10px; left: 10px; background-color: var(--color-widget-background); padding: 4px 8px; border-radius: var(--border-radius); z-index: 1;">
-                      <span class="size-h5 uppercase color-primary">{{.String "entryType"}}</span>
-                    </div>
-                    <div class="relative" style="height: 180px; overflow: hidden; border-radius: var(--border-radius) var(--border-radius) 0 0;">
-                      <img src="https://mealie.pangolin-morpho.ts.net/api/media/recipes/{{.String "recipeId"}}/images/original.webp" 
-                          class="max-width-100" style="width: 100%; height: 100%; object-fit: cover;"/>
-                    </div>
-                    <div class="padding-block-5 padding-inline-widget">
-                      <h3 class="size-h3 color-highlight margin-block-5 text-truncate">{{.String "recipe.name"}}</h3>
-                    </div>
-                  </div>
-                {{ else }}
-                  <p class="text-center color-subdue padding-block-5 flex-1">No meals planned for today</p>
-                {{ end }}
-              </div>
           
-
 
           - type: repository
             repository: 0xSolanaceae/proXXy
@@ -160,17 +164,29 @@ pages:
             location: 04101
             units: imperial
             hour-format: 12h
-
-          - type: markets
-            symbol-link-template: https://www.tradingview.com/symbols/{SYMBOL}/news
-            markets:
-              - symbol: VOO
-                name: Vanguard S&P 500 ETF
-              - symbol: QQQM
-                name: Invesco QQQM ETF
-              - symbol: VTI
-                name: Vanguard Total Stock Market ETF
-              - symbol: QQQ
-                name: Invesco QQQ ETF
-              - symbol: SCHD
-                name: Schwab U.S. Dividend Equity ETF
+      
+          - type: custom-api
+            title: Today's Meal
+            cache: 1m
+            url: https://mealie.pangolin-morpho.ts.net/api/households/mealplans/today
+            headers:
+              Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb25nX3Rva2VuIjp0cnVlLCJpZCI6ImExNzAyOWYzLWQ1MWEtNDhiZi05NDdmLTRkYTdhNTY1YTMxMyIsIm5hbWUiOiJnbGFuY2UiLCJpbnRlZ3JhdGlvbl9pZCI6ImdlbmVyaWMiLCJleHAiOjE5MDI1MDMyNDN9.steWIxS0nKrcdGbk0ky4hpFK6t2S_g4lQ0au5SzLwFM
+            template: |
+              <div class="flex gap-15 justify-between">
+                {{ range .JSON.Array "" }}
+                  <div class="card widget-content-frame flex-1" style="min-width: 0; max-width: calc(50% - 7.5px);">
+                    <div class="absolute" style="top: 10px; left: 10px; background-color: var(--color-widget-background); padding: 4px 8px; border-radius: var(--border-radius); z-index: 1;">
+                      <span class="size-h5 uppercase color-primary">{{.String "entryType"}}</span>
+                    </div>
+                    <div class="relative" style="height: 180px; overflow: hidden; border-radius: var(--border-radius) var(--border-radius) 0 0;">
+                      <img src="https://mealie.pangolin-morpho.ts.net/api/media/recipes/{{.String "recipeId"}}/images/original.webp" 
+                          class="max-width-100" style="width: 100%; height: 100%; object-fit: cover;"/>
+                    </div>
+                    <div class="padding-block-5 padding-inline-widget">
+                      <h3 class="size-h3 color-highlight margin-block-5 text-truncate">{{.String "recipe.name"}}</h3>
+                    </div>
+                  </div>
+                {{ else }}
+                  <p class="text-center color-subdue padding-block-5 flex-1">No meals planned for today</p>
+                {{ end }}
+              </div>
