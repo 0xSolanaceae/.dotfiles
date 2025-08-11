@@ -126,6 +126,10 @@ pages:
                 check-url: https://100.87.123.12:8443/
                 icon: di:crafty-controller
                 allow-insecure: true
+              - title: n8n
+                url: https://n8n.pangolin-morpho.ts.net/
+                check-url: https://n8n.pangolin-morpho.ts.net/
+                icon: di:n8n
               - title: Tailscale
                 url: https://login.tailscale.com/
                 check-url: https://tailscale.com/
