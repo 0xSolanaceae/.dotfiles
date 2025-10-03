@@ -38,7 +38,6 @@ bars:
         [
           "home",
           "media",
-
         ]
       center:
         [
@@ -46,7 +45,6 @@ bars:
         ]
       right:
         [
-
           "weather",
           #"cava",
           "cpu",
@@ -64,14 +62,14 @@ widgets:
     options:
       bar_height: 20
       gradient: 1
-      reverse: 0
+      reverse: 1
       foreground: "#cba6f7"
       gradient_color_1: '#cba6f7'
       gradient_color_2: '#B4BEFE'
       bars_number: 50
       bar_spacing: 1
       bar_width: 10
-      noise_reduction: 0.25
+      noise_reduction: 0.20
       sleep_timer: 2
       hide_empty: true
       container_padding:
@@ -212,23 +210,6 @@ widgets:
       max_length: 20
       max_length_ellipsis: "..."
       monitor_exclusive: true
-  disk:
-    type: "yasb.disk.DiskWidget"
-    options:
-        label: "<span>\uf473</span>"
-        label_alt: "<span>\uf473</span>"
-        group_label:
-          volume_labels: ["C", "D", "E", "F"]
-          show_label_name: true 
-          blur: True
-          round_corners: True
-          round_corners_type: "normal"
-          border_color: "System"
-          alignment: "right"
-          direction: "down"
-          distance: 6
-        callbacks:
-          on_left: "toggle_group"
   cpu:
     type: "yasb.cpu.CpuWidget"
     options:
