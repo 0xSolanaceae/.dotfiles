@@ -53,24 +53,25 @@ widgets:
   cava:
     type: "yasb.cava.CavaWidget"
     options:
-      bar_height: 18
-      min_bar_height: 2
+      bar_height: 24
+      min_bar_height: 3
       gradient: 1
       foreground: "#cba6f7"
-      gradient_color_1: '#cba6f7'
-      gradient_color_2: '#89b4fa'
-      bars_number: 20
-      bar_spacing: 2
-      bar_width: 3
+      gradient_color_1: '#f38ba8'
+      gradient_color_2: '#cba6f7'
+      bars_number: 32
+      bar_spacing: 3
+      bar_width: 4
       bar_type: "bars"
-      noise_reduction: 0.10
-      edge_fade: 35
+      noise_reduction: 0
+      sensitivity: 200
+      edge_fade: 45
       sleep_timer: 0
       container_padding:
         top: 0
-        left: 8
+        left: 12
         bottom: 0
-        right: 8
+        right: 12
   battery:
     type: "yasb.battery.BatteryWidget"
     options:
