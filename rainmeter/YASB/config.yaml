@@ -1,10 +1,6 @@
 watch_stylesheet: true
 watch_config: true
 debug: false
-#komorebi:
-#  start_command: "komorebic start"
-#  stop_command: "komorebic stop"
-#  reload_command: "komorebic stop && komorebic start"
 bars:
   status-bar:
     enabled: true
@@ -38,45 +34,73 @@ bars:
         [
           "home",
           "media",
+          "active_window"
         ]
       center:
         [
-          "cava",
+          clock,
+          weather
         ]
       right:
         [
-          "weather",
-          #"cava",
+          "cava",
           "cpu",
           "memory",
-          #"traffic",
-          #"volume",
-          #"wifi",
-          #"disk",
-          "clock",
+          "battery",
           "power_menu"
         ]
 widgets:
   cava:
     type: "yasb.cava.CavaWidget"
     options:
-      bar_height: 20
+      bar_height: 15
+      min_bar_height: 0
       gradient: 1
-      reverse: 1
       foreground: "#cba6f7"
       gradient_color_1: '#cba6f7'
       gradient_color_2: '#B4BEFE'
-      bars_number: 50
+      bars_number: 18
       bar_spacing: 1
       bar_width: 10
+      bar_type: "bars" #Type of bar display. Can be 'bars', 'bars_mirrored', 'waves', or 'waves_mirrored'.
       noise_reduction: 0.20
-      sleep_timer: 2
-      hide_empty: true
+      edge_fade: 40
+      sleep_timer: 0
       container_padding:
         top: 0
         left: 4
         bottom: 0
         right: 4
+  battery:
+    type: "yasb.battery.BatteryWidget"
+    options:
+      label: "<span>{icon}</span> {percent}%"
+      label_alt: "<span>{icon}</span> {percent}% | time: {time_remaining}"
+      update_interval: 5000
+      time_remaining_natural: False
+      hide_unsupported: True
+      charging_options:
+        icon_format: "{charging_icon}"
+        blink_charging_icon: true
+        blink_interval: 500
+      status_thresholds:
+        critical: 10
+        low: 25
+        medium: 75
+        high: 95
+        full: 100
+      status_icons:
+        icon_charging: "\uf0e7"
+        icon_critical: "\uf244"
+        icon_low: "\uf243"
+        icon_medium: "\uf242"
+        icon_high: "\uf241"
+        icon_full: "\uf240"
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [ 1, 1 ]
   home:
     type: "yasb.home.HomeWidget"
     options:
@@ -148,13 +172,13 @@ widgets:
   clock:
     type: "yasb.clock.ClockWidget"
     options:
-      label: "<span>\ue769</span>{%I:%M %p}"
+      label: "{%a, %d %b - %I:%M}"
       label_alt: "{%a, %d %b %H:%M:%S}"
       timezones: [] #Looking up time zone info from registry
   weather:
     type: "yasb.weather.WeatherWidget"
     options:
-      label: "<span>{icon}</span> {temp}"
+      label: "<span>{icon}</span> {temp} - {location}"
       label_alt: "{location}: {conditions}, Min {min_temp}, Max {max_temp}, Humidity {humidity}"
       api_key: 'ae56bdf6ff904f0ab4a220654250210'
       update_interval: 600 #Update interval in seconds, Min 600
